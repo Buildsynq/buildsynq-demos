@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BuildSynq — Project Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple: #6366F1;
+  --purple-dark: #4F46E5;
+  --purple-light: #EEF2FF;
+  --purple-mid: #818CF8;
+  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --green: #10B981;
+  --green-light: #ECFDF5;
+  --yellow: #F59E0B;
+  --yellow-light: #FFFBEB;
+  --red: #EF4444;
+  --red-light: #FEF2F2;
+  --text: #1E293B;
+  --text-2: #475569;
+  --text-3: #94A3B8;
+  --border: #E2E8F0;
+  --bg: #F8FAFC;
+  --white: #FFFFFF;
+  --card-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --card-shadow-hover: 0 8px 24px rgba(99,102,241,0.12), 0 2px 8px rgba(0,0,0,0.06);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ---- TOP NAV ---- */
+.topnav {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.nav-left { display: flex; align-items: center; gap: 2.5rem; }
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--purple);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.nav-tabs { display: flex; gap: 0.25rem; }
+
+.nav-tab {
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: all 0.15s;
+  border: none;
+  background: none;
+}
+.nav-tab:hover { background: var(--purple-light); color: var(--purple); }
+.nav-tab.active { background: var(--purple-light); color: var(--purple); }
+
+.nav-right { display: flex; align-items: center; gap: 1rem; }
+
+.notif-btn {
+  width: 38px; height: 38px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  position: relative;
+  transition: all 0.15s;
+}
+.notif-btn:hover { background: var(--bg); }
+
+.notif-dot {
+  position: absolute;
+  top: 6px; right: 6px;
+  width: 8px; height: 8px;
+  background: var(--red);
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.user-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.75rem 0.4rem 0.4rem;
+  border-radius: 40px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.user-pill:hover { border-color: var(--purple); }
+
+.avatar {
+  width: 30px; height: 30px;
+  background: var(--gradient);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: white;
+}
+
+.user-name { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+
+/* ---- LAYOUT ---- */
+.layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: calc(100vh - 64px);
+}
+
+/* ---- SIDEBAR ---- */
+.sidebar {
+  background: var(--white);
+  border-right: 1px solid var(--border);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebar-section {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  padding: 0.75rem 0.75rem 0.4rem;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-2);
+  text-decoration: none;
+}
+.sidebar-item:hover { background: var(--purple-light); color: var(--purple); }
+.sidebar-item.active { background: var(--purple-light); color: var(--purple); font-weight: 600; }
+
+.sidebar-icon { font-size: 1rem; width: 20px; text-align: center; }
+
+.sidebar-badge {
+  margin-left: auto;
+  background: var(--red);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+}
+.sidebar-badge.green { background: var(--green); }
+.sidebar-badge.yellow { background: var(--yellow); color: #1a0e00; }
+.sidebar-badge.gray { background: var(--text-3); }
+
+.sidebar-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0.5rem 0;
+}
+
+.project-switcher {
+  margin-bottom: 1rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.75rem;
+}
+
+.project-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 0.4rem;
+}
+
+.project-name {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.15rem;
+}
+
+.project-meta {
+  font-size: 0.75rem;
+  color: var(--text-3);
+}
+
+.project-switch-btn {
+  font-size: 0.75rem;
+  color: var(--purple);
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.4rem;
+}
+
+/* ---- MAIN CONTENT ---- */
+.main {
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+/* ---- PAGE VIEWS ---- */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ---- PAGE HEADER ---- */
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.75rem;
+}
+
+.page-title { font-size: 1.5rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
+.page-subtitle { font-size: 0.88rem; color: var(--text-3); margin-top: 0.25rem; }
+
+.header-actions { display: flex; gap: 0.75rem; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--text-2);
+  text-decoration: none;
+}
+.btn:hover { background: var(--bg); border-color: var(--text-3); }
+
+.btn-primary {
+  background: var(--purple);
+  color: white;
+  border-color: var(--purple);
+}
+.btn-primary:hover { background: var(--purple-dark); border-color: var(--purple-dark); }
+
+.btn-success {
+  background: var(--green);
+  color: white;
+  border-color: var(--green);
+}
+.btn-success:hover { background: #059669; }
+
+/* ---- MONEY BANNER ---- */
+.money-banner {
+  background: var(--gradient);
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  color: white;
+  margin-bottom: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.money-banner::before {
+  content: '';
+  position: absolute;
+  right: -40px;
+  top: -40px;
+  width: 250px;
+  height: 250px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 50%;
+}
+
+.money-banner::after {
+  content: '';
+  position: absolute;
+  right: 80px;
+  bottom: -60px;
+  width: 180px;
+  height: 180px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 50%;
+}
+
+.banner-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  margin-bottom: 0.4rem;
+}
+
+.banner-amount {
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+
+.banner-sub {
+  font-size: 0.88rem;
+  opacity: 0.8;
+}
+
+.banner-actions { display: flex; gap: 0.75rem; position: relative; z-index: 1; }
+
+.banner-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.banner-btn-primary {
+  background: white;
+  color: var(--purple-dark);
+}
+.banner-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+.banner-btn-secondary {
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+.banner-btn-secondary:hover { background: rgba(255,255,255,0.25); }
+
+/* ---- STAT CARDS ---- */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+}
+
+.stat-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.25rem;
+  box-shadow: var(--card-shadow);
+  transition: all 0.2s;
+}
+.stat-card:hover { box-shadow: var(--card-shadow-hover); transform: translateY(-1px); }
+
+.stat-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.stat-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+}
+
+.stat-icon.green { background: var(--green-light); }
+.stat-icon.yellow { background: var(--yellow-light); }
+.stat-icon.purple { background: var(--purple-light); }
+.stat-icon.red { background: var(--red-light); }
+
+.stat-trend {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+}
+.stat-trend.up { background: var(--green-light); color: var(--green); }
+.stat-trend.down { background: var(--red-light); color: var(--red); }
+.stat-trend.neutral { background: var(--bg); color: var(--text-3); }
+
+.stat-value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+
+.stat-label { font-size: 0.82rem; color: var(--text-3); font-weight: 500; }
+
+/* ---- TWO COL GRID ---- */
+.two-col { display: grid; grid-template-columns: 1fr 360px; gap: 1.25rem; margin-bottom: 1.25rem; }
+
+/* ---- CARD ---- */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.card-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-link {
+  font-size: 0.82rem;
+  color: var(--purple);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+}
+.card-link:hover { text-decoration: underline; }
+
+/* ---- MILESTONE LIST ---- */
+.milestone-list { padding: 0.5rem 0; }
+
+.milestone-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  transition: background 0.1s;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+}
+.milestone-item:last-child { border-bottom: none; }
+.milestone-item:hover { background: var(--bg); }
+
+.milestone-status {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.ms-done { background: var(--green-light); }
+.ms-pending { background: var(--yellow-light); }
+.ms-locked { background: var(--bg); }
+.ms-alert { background: var(--red-light); }
+
+.milestone-content { flex: 1; }
+.milestone-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+}
+.milestone-meta {
+  font-size: 0.78rem;
+  color: var(--text-3);
+}
+
+.milestone-right { text-align: right; }
+.milestone-amount {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+}
+.milestone-tag {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+.tag-released { background: var(--green-light); color: var(--green); }
+.tag-ready { background: var(--purple-light); color: var(--purple); }
+.tag-pending { background: var(--yellow-light); color: var(--yellow); }
+.tag-locked { background: var(--bg); color: var(--text-3); }
+.tag-overdue { background: var(--red-light); color: var(--red); }
+
+/* ---- PROGRESS BAR ---- */
+.progress-wrap { margin: 0 1.5rem 1.25rem; }
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-3);
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+}
+.progress-bar {
+  height: 8px;
+  background: var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 10px;
+  background: var(--gradient);
+  transition: width 0.6s ease;
+}
+
+/* ---- TASK LIST ---- */
+.task-list { padding: 0.5rem 0; }
+
+.task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  transition: background 0.1s;
+  cursor: pointer;
+}
+.task-item:last-child { border-bottom: none; }
+.task-item:hover { background: var(--bg); }
+
+.task-checkbox {
+  width: 20px; height: 20px;
+  border-radius: 6px;
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.task-checkbox.done { background: var(--green); border-color: var(--green); color: white; font-size: 0.7rem; }
+
+.task-content { flex: 1; }
+.task-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+}
+.task-title.done { text-decoration: line-through; color: var(--text-3); }
+.task-meta { font-size: 0.75rem; color: var(--text-3); }
+
+.task-priority {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.priority-high { background: var(--red-light); color: var(--red); }
+.priority-medium { background: var(--yellow-light); color: var(--yellow); }
+.priority-low { background: var(--green-light); color: var(--green); }
+
+/* ---- ACTIVITY ---- */
+.activity-list { padding: 0.5rem 0; }
+.activity-item {
+  display: flex;
+  gap: 0.85rem;
+  padding: 0.9rem 1.5rem;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  align-items: flex-start;
+}
+.activity-item:last-child { border-bottom: none; }
+
+.activity-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.activity-body { flex: 1; }
+.activity-text {
+  font-size: 0.84rem;
+  color: var(--text-2);
+  line-height: 1.5;
+  margin-bottom: 0.2rem;
+}
+.activity-text strong { color: var(--text); font-weight: 600; }
+.activity-time { font-size: 0.72rem; color: var(--text-3); }
+
+/* ---- PHOTO GRID ---- */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+}
+
+.photo-placeholder {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-direction: column;
+  gap: 0.3rem;
+  color: var(--text-3);
+}
+.photo-placeholder:hover { border-color: var(--purple); background: var(--purple-light); color: var(--purple); }
+.photo-placeholder span { font-size: 0.7rem; font-weight: 600; }
+
+.photo-real {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+}
+
+.photo-real img { width: 100%; height: 100%; object-fit: cover; }
+.photo-badge {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  background: var(--green);
+  color: white;
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+}
+
+/* ---- PAYMENT ACTION CARD ---- */
+.pay-action-card {
+  background: var(--green-light);
+  border: 2px solid var(--green);
+  border-radius: 14px;
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pay-action-left { flex: 1; }
+.pay-action-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.pay-action-desc { font-size: 0.84rem; color: var(--text-2); }
+.pay-action-amount {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--green);
+  white-space: nowrap;
+}
+
+/* ---- OVERDUE CARD ---- */
+.overdue-card {
+  background: var(--red-light);
+  border: 2px solid var(--red);
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.overdue-left { flex: 1; }
+.overdue-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.overdue-desc { font-size: 0.82rem; color: var(--text-2); }
+
+/* ---- CHANGE ORDER ---- */
+.co-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.co-item:last-child { border-bottom: none; }
+.co-item:hover { background: var(--bg); }
+
+.co-number {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-3);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.co-content { flex: 1; }
+.co-title { font-size: 0.88rem; font-weight: 600; color: var(--text); margin-bottom: 0.15rem; }
+.co-meta { font-size: 0.75rem; color: var(--text-3); }
+
+.co-right { text-align: right; }
+.co-amount { font-size: 0.9rem; font-weight: 700; color: var(--text); }
+.co-status { font-size: 0.72rem; font-weight: 600; margin-top: 0.15rem; }
+
+/* ---- TABLE ---- */
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th {
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  padding: 0.75rem 1.5rem;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+.data-table td {
+  padding: 1rem 1.5rem;
+  font-size: 0.88rem;
+  color: var(--text-2);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  vertical-align: middle;
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: var(--bg); }
+.td-primary { color: var(--text) !important; font-weight: 600 !important; }
+
+/* ---- STATUS PILL ---- */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.pill-green { background: var(--green-light); color: var(--green); }
+.pill-yellow { background: var(--yellow-light); color: #92400E; }
+.pill-red { background: var(--red-light); color: var(--red); }
+.pill-purple { background: var(--purple-light); color: var(--purple); }
+.pill-gray { background: var(--bg); color: var(--text-3); border: 1px solid var(--border); }
+
+/* ---- PAYMENT PILL ---- */
+.amount-green { color: var(--green); font-weight: 700; }
+.amount-yellow { color: var(--yellow); font-weight: 700; }
+.amount-red { color: var(--red); font-weight: 700; }
+
+/* ---- WHATSAPP BAR ---- */
+.whatsapp-bar {
+  background: #25D366;
+  border-radius: 12px;
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-bottom: 1rem;
+}
+.whatsapp-bar:hover { background: #22c55e; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,211,102,0.3); }
+.whatsapp-icon { font-size: 1.25rem; }
+.whatsapp-text { color: white; font-size: 0.88rem; font-weight: 600; flex: 1; }
+.whatsapp-arrow { color: rgba(255,255,255,0.8); }
+
+/* ---- SEARCH ---- */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.6rem 1rem;
+  margin-bottom: 1.25rem;
+  transition: border-color 0.2s;
+}
+.search-bar:focus-within { border-color: var(--purple); }
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+.search-input::placeholder { color: var(--text-3); }
+
+/* ---- FILTER ROW ---- */
+.filter-row {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.filter-chip {
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-chip:hover { border-color: var(--purple); color: var(--purple); }
+.filter-chip.active { background: var(--purple-light); border-color: var(--purple); color: var(--purple); font-weight: 600; }
+.filter-count { font-size: 0.8rem; color: var(--text-3); margin-left: auto; }
+
+/* ---- EMPTY STATE ---- */
+.empty { text-align: center; padding: 3rem; color: var(--text-3); }
+.empty-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+.empty p { font-size: 0.88rem; }
+
+/* ---- LIEN WAIVER ---- */
+.lien-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(0,0,0,0.04);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.lien-item:hover { background: var(--bg); }
+.lien-item:last-child { border-bottom: none; }
+.lien-icon { font-size: 1.25rem; }
+.lien-content { flex: 1; }
+.lien-title { font-size: 0.88rem; font-weight: 600; color: var(--text); margin-bottom: 0.15rem; }
+.lien-meta { font-size: 0.75rem; color: var(--text-3); }
+
+/* ---- AI INSIGHT ---- */
+.ai-insight {
+  background: var(--purple-light);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  gap: 0.75rem;
+  margin: 0 1.5rem 1rem;
+}
+.ai-chip {
+  background: var(--purple);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  height: fit-content;
+  white-space: nowrap;
+  margin-top: 1px;
+}
+.ai-text { font-size: 0.84rem; color: var(--text-2); line-height: 1.6; }
+.ai-text strong { color: var(--purple-dark); }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="nav-left">
+    <a href="#" class="logo">BuildSynq</a>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="switchTab('dashboard', this)">Dashboard</button>
+      <button class="nav-tab" onclick="switchTab('projects', this)">My Projects</button>
+      <button class="nav-tab" onclick="switchTab('payments', this)">Payments</button>
+      <button class="nav-tab" onclick="switchTab('documents', this)">Documents</button>
+      <button class="nav-tab" onclick="switchTab('team', this)">Team</button>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="notif-btn">🔔<div class="notif-dot"></div></div>
+    <div class="user-pill">
+      <div class="avatar">MC</div>
+      <span class="user-name">Mike's Construction</span>
+    </div>
+  </div>
+</nav>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="project-switcher">
+      <div class="project-label">Active Project</div>
+      <div class="project-name">Oakwood Kitchen Remodel</div>
+      <div class="project-meta">Phase 3 of 6 · Detroit, MI</div>
+      <div class="project-switch-btn">Switch Project ↓</div>
+    </div>
+
+    <div onclick="showPage('home')" class="sidebar-item active" id="nav-home">
+      <span class="sidebar-icon">🏠</span> Home
+    </div>
+    <div onclick="showPage('tasks')" class="sidebar-item" id="nav-tasks">
+      <span class="sidebar-icon">✅</span> Today's Tasks
+      <span class="sidebar-badge">4</span>
+    </div>
+    <div onclick="showPage('milestones')" class="sidebar-item" id="nav-milestones">
+      <span class="sidebar-icon">💰</span> Milestones & Pay
+    </div>
+    <div onclick="showPage('photos')" class="sidebar-item" id="nav-photos">
+      <span class="sidebar-icon">📸</span> Photos & Docs
+      <span class="sidebar-badge yellow">2</span>
+    </div>
+    <div onclick="showPage('changeorders')" class="sidebar-item" id="nav-changeorders">
+      <span class="sidebar-icon">📝</span> Change Orders
+      <span class="sidebar-badge">1</span>
+    </div>
+    <div onclick="showPage('schedule')" class="sidebar-item" id="nav-schedule">
+      <span class="sidebar-icon">📅</span> Schedule
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">Tools</div>
+    <div onclick="showPage('subs')" class="sidebar-item" id="nav-subs">
+      <span class="sidebar-icon">👷</span> Subcontractors
+    </div>
+    <div onclick="showPage('lien')" class="sidebar-item" id="nav-lien">
+      <span class="sidebar-icon">🔏</span> Lien Waivers
+      <span class="sidebar-badge yellow">3</span>
+    </div>
+    <div onclick="showPage('budget')" class="sidebar-item" id="nav-budget">
+      <span class="sidebar-icon">📊</span> Budget Tracker
+    </div>
+    <div onclick="showPage('compliance')" class="sidebar-item" id="nav-compliance">
+      <span class="sidebar-icon">✔️</span> Compliance
+    </div>
+
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-item">
+      <span class="sidebar-icon">⚙️</span> Settings
+    </div>
+    <div class="sidebar-item">
+      <span class="sidebar-icon">❓</span> Help & Support
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ========== HOME ========== -->
+    <div class="page active" id="page-home">
+
+      <!-- OVERDUE ALERT -->
+      <div class="overdue-card">
+        <div class="overdue-left">
+          <div class="overdue-title">🚨 Payment Overdue — Action Required</div>
+          <div class="overdue-desc">Invoice #1042 · Rough Framing · 12 days past due · Owner: James Thornton</div>
+        </div>
+        <div style="display:flex;gap:0.6rem;">
+          <div class="btn" style="border-color:var(--red);color:var(--red);">View Invoice</div>
+          <div class="btn btn-primary">Send Reminder</div>
+        </div>
+      </div>
+
+      <!-- MONEY BANNER -->
+      <div class="money-banner">
+        <div style="position:relative;z-index:1;">
+          <div class="banner-label">💵 Ready to Collect This Week</div>
+          <div class="banner-amount">$47,500</div>
+          <div class="banner-sub">Milestone 3 verified · Awaiting your release request</div>
+        </div>
+        <div class="banner-actions">
+          <button class="banner-btn banner-btn-primary" onclick="showPage('milestones')">Release Payment</button>
+          <button class="banner-btn banner-btn-secondary" onclick="showPage('milestones')">View All Payments</button>
+        </div>
+      </div>
+
+      <!-- STAT CARDS -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon green">💰</div>
+            <span class="stat-trend up">↑ On Track</span>
+          </div>
+          <div class="stat-value">$142K</div>
+          <div class="stat-label">Total Paid This Project</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon purple">📋</div>
+            <span class="stat-trend neutral">3 left</span>
+          </div>
+          <div class="stat-value">50%</div>
+          <div class="stat-label">Project Completion</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon yellow">⏱</div>
+            <span class="stat-trend down">↓ 4 days late</span>
+          </div>
+          <div class="stat-value">Nov 14</div>
+          <div class="stat-label">Estimated Completion</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon red">⚠️</div>
+            <span class="stat-trend neutral">Review</span>
+          </div>
+          <div class="stat-value">$8,200</div>
+          <div class="stat-label">Pending Change Orders</div>
+        </div>
+      </div>
+
+      <!-- TWO COL -->
+      <div class="two-col">
+
+        <!-- Left: Today's Tasks + Activity -->
+        <div style="display:flex;flex-direction:column;gap:1.25rem;">
+
+          <!-- Today's Tasks -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">✅ Today's To-Do List</div>
+              <a class="card-link" onclick="showPage('tasks')">View All →</a>
+            </div>
+            <div class="task-list">
+              <div class="task-item" onclick="toggleTask(this)">
+                <div class="task-checkbox done">✓</div>
+                <div class="task-content">
+                  <div class="task-title done">Upload 3 photos of drywall install — Milestone 3</div>
+                  <div class="task-meta">📸 Required for payment · Done 8:42 AM</div>
+                </div>
+                <span class="task-priority priority-high">Payment</span>
+              </div>
+              <div class="task-item" onclick="toggleTask(this)">
+                <div class="task-checkbox"></div>
+                <div class="task-content">
+                  <div class="task-title">Submit lien waiver — Electrical sub (Tony's Electric)</div>
+                  <div class="task-meta">🔏 Required before your payment releases</div>
+                </div>
+                <span class="task-priority priority-high">Urgent</span>
+              </div>
+              <div class="task-item" onclick="toggleTask(this)">
+                <div class="task-checkbox"></div>
+                <div class="task-content">
+                  <div class="task-title">Respond to change order #CO-004 — Owner approval needed</div>
+                  <div class="task-meta">📝 $8,200 · Additional HVAC ductwork · Waiting since yesterday</div>
+                </div>
+                <span class="task-priority priority-high">High</span>
+              </div>
+              <div class="task-item" onclick="toggleTask(this)">
+                <div class="task-checkbox"></div>
+                <div class="task-content">
+                  <div class="task-title">Schedule inspection for electrical rough-in</div>
+                  <div class="task-meta">📅 Must be done before insulation can start</div>
+                </div>
+                <span class="task-priority priority-medium">Medium</span>
+              </div>
+              <div class="task-item" onclick="toggleTask(this)">
+                <div class="task-checkbox"></div>
+                <div class="task-content">
+                  <div class="task-title">Order cabinets — lead time is 6 weeks</div>
+                  <div class="task-meta">🛒 Delays payment of Milestone 5 if not ordered today</div>
+                </div>
+                <span class="task-priority priority-medium">Medium</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- WhatsApp -->
+          <div class="whatsapp-bar">
+            <span class="whatsapp-icon">💬</span>
+            <span class="whatsapp-text">Message James Thornton (Owner) via WhatsApp</span>
+            <span class="whatsapp-arrow">→</span>
+          </div>
+
+          <!-- Activity Feed -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📡 Recent Activity</div>
+              <a class="card-link">See All</a>
+            </div>
+            <div class="activity-list">
+              <div class="activity-item">
+                <div class="activity-dot" style="background:var(--green)"></div>
+                <div class="activity-body">
+                  <div class="activity-text"><strong>AI verified 3 photos</strong> — Drywall install confirmed ✓</div>
+                  <div class="activity-time">Today, 8:42 AM</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot" style="background:var(--purple)"></div>
+                <div class="activity-body">
+                  <div class="activity-text"><strong>James approved Milestone 3</strong> — $47,500 is ready to release</div>
+                  <div class="activity-time">Yesterday, 4:15 PM</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot" style="background:var(--yellow)"></div>
+                <div class="activity-body">
+                  <div class="activity-text"><strong>Change order submitted</strong> — CO-004 for $8,200 sent to James for approval</div>
+                  <div class="activity-time">Yesterday, 11:30 AM</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot" style="background:var(--green)"></div>
+                <div class="activity-body">
+                  <div class="activity-text"><strong>$35,000 deposited</strong> — Milestone 2 payment received</div>
+                  <div class="activity-time">Oct 18, 2:01 PM</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot" style="background:var(--red)"></div>
+                <div class="activity-body">
+                  <div class="activity-text"><strong>Invoice #1042 still unpaid</strong> — 12 days overdue · Reminder sent</div>
+                  <div class="activity-time">Oct 10, 9:00 AM</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Milestones + Photos -->
+        <div style="display:flex;flex-direction:column;gap:1.25rem;">
+
+          <!-- Milestone Pay Summary -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">💰 Payment Schedule</div>
+              <a class="card-link" onclick="showPage('milestones')">Details →</a>
+            </div>
+            <div class="progress-wrap" style="margin-top:1rem;">
+              <div class="progress-labels">
+                <span>$142K paid of $284K total</span>
+                <span style="color:var(--green);font-weight:700;">50%</span>
+              </div>
+              <div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div>
+            </div>
+            <div class="milestone-list">
+              <div class="milestone-item">
+                <div class="milestone-status ms-done">✅</div>
+                <div class="milestone-content">
+                  <div class="milestone-name">1 — Project Start / Mobilization</div>
+                  <div class="milestone-meta">Paid Oct 3</div>
+                </div>
+                <div class="milestone-right">
+                  <div class="milestone-amount">$28,400</div>
+                  <span class="milestone-tag tag-released">Released</span>
+                </div>
+              </div>
+              <div class="milestone-item">
+                <div class="milestone-status ms-done">✅</div>
+                <div class="milestone-content">
+                  <div class="milestone-name">2 — Demo & Rough Framing</div>
+                  <div class="milestone-meta">Paid Oct 18</div>
+                </div>
+                <div class="milestone-right">
+                  <div class="milestone-amount">$35,000</div>
+                  <span class="milestone-tag tag-released">Released</span>
+                </div>
+              </div>
+              <div class="milestone-item" style="background:var(--green-light);">
+                <div class="milestone-status ms-done">✓</div>
+                <div class="milestone-content">
+                  <div class="milestone-name" style="color:var(--green)">3 — Drywall & MEP Rough-In</div>
+                  <div class="milestone-meta" style="color:var(--green)">✓ Verified — Ready to release!</div>
+                </div>
+                <div class="milestone-right">
+                  <div class="milestone-amount" style="color:var(--green)">$47,500</div>
+                  <span class="milestone-tag tag-ready">Collect Now</span>
+                </div>
+              </div>
+              <div class="milestone-item">
+                <div class="milestone-status ms-pending">⏳</div>
+                <div class="milestone-content">
+                  <div class="milestone-name">4 — Insulation & Drywall Finish</div>
+                  <div class="milestone-meta">In progress · Est. 2 weeks</div>
+                </div>
+                <div class="milestone-right">
+                  <div class="milestone-amount">$42,300</div>
+                  <span class="milestone-tag tag-pending">In Progress</span>
+                </div>
+              </div>
+              <div class="milestone-item">
+                <div class="milestone-status ms-locked">🔒</div>
+                <div class="milestone-content">
+                  <div class="milestone-name">5 — Cabinets & Fixtures</div>
+                  <div class="milestone-meta">Not started</div>
+                </div>
+                <div class="milestone-right">
+                  <div class="milestone-amount">$78,800</div>
+                  <span class="milestone-tag tag-locked">Locked</span>
+                </div>
+              </div>
+              <div class="milestone-item">
+                <div class="milestone-status ms-locked">🔒</div>
+                <div class="milestone-content">
+                  <div class="milestone-name">6 — Final Walkthrough & Punch</div>
+                  <div class="milestone-meta">Not started</div>
+                </div>
+                <div class="milestone-right">
+                  <div class="milestone-amount">$52,000</div>
+                  <span class="milestone-tag tag-locked">Locked</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recent Photos -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📸 Job Site Photos</div>
+              <a class="card-link" onclick="showPage('photos')">View All →</a>
+            </div>
+            <div style="padding:0 0.5rem;">
+              <div class="ai-insight">
+                <div class="ai-chip">AI</div>
+                <div class="ai-text"><strong>3 photos verified</strong> for Milestone 3 — GPS location confirmed, work matches scope. <strong>Upload 2 more</strong> for Milestone 4 to get ahead.</div>
+              </div>
+            </div>
+            <div class="photo-grid">
+              <div class="photo-real">
+                <div style="background:linear-gradient(135deg,#cbd5e1,#94a3b8);width:100%;height:100%;min-height:80px;display:flex;align-items:center;justify-content:center;font-size:2rem;border-radius:8px;">🧱</div>
+                <div class="photo-badge">✓ GPS</div>
+              </div>
+              <div class="photo-real">
+                <div style="background:linear-gradient(135deg,#a3c4bc,#7fb3a5);width:100%;height:100%;min-height:80px;display:flex;align-items:center;justify-content:center;font-size:2rem;border-radius:8px;">🏗️</div>
+                <div class="photo-badge">✓ GPS</div>
+              </div>
+              <div class="photo-real">
+                <div style="background:linear-gradient(135deg,#d4a5a5,#b78888);width:100%;height:100%;min-height:80px;display:flex;align-items:center;justify-content:center;font-size:2rem;border-radius:8px;">⚡</div>
+                <div class="photo-badge">✓ GPS</div>
+              </div>
+              <div class="photo-placeholder">📷<span>Add Photo</span></div>
+              <div class="photo-placeholder">📷<span>Add Photo</span></div>
+              <div class="photo-placeholder">📷<span>Add Photo</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== TASKS ========== -->
+    <div class="page" id="page-tasks">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Today's Tasks</div>
+          <div class="page-subtitle">Tuesday, Oct 24 · 4 tasks remaining</div>
+        </div>
+        <div class="header-actions">
+          <div class="btn btn-primary">+ Add Task</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:1.25rem;">
+        <div class="card-header">
+          <div class="card-title" style="color:var(--red)">🔴 Urgent — Do These First</div>
+        </div>
+        <div class="task-list">
+          <div class="task-item" onclick="toggleTask(this)">
+            <div class="task-checkbox"></div>
+            <div class="task-content">
+              <div class="task-title">Submit lien waiver — Tony's Electric</div>
+              <div class="task-meta">🔏 Blocks your $47,500 Milestone 3 payment from releasing</div>
+            </div>
+            <span class="task-priority priority-high">Blocks Payment</span>
+          </div>
+          <div class="task-item" onclick="toggleTask(this)">
+            <div class="task-checkbox"></div>
+            <div class="task-content">
+              <div class="task-title">Approve or reject Change Order CO-004 ($8,200)</div>
+              <div class="task-meta">📝 James is waiting · Delays project if not resolved today</div>
+            </div>
+            <span class="task-priority priority-high">Urgent</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:1.25rem;">
+        <div class="card-header">
+          <div class="card-title">📋 To Do Today</div>
+        </div>
+        <div class="task-list">
+          <div class="task-item" onclick="toggleTask(this)">
+            <div class="task-checkbox done">✓</div>
+            <div class="task-content">
+              <div class="task-title done">Upload photos of drywall install for Milestone 3</div>
+              <div class="task-meta">Done 8:42 AM · AI verified ✓</div>
+            </div>
+            <span class="task-priority priority-high">Done</span>
+          </div>
+          <div class="task-item" onclick="toggleTask(this)">
+            <div class="task-checkbox"></div>
+            <div class="task-content">
+              <div class="task-title">Schedule rough-in electrical inspection</div>
+              <div class="task-meta">📅 Call City of Detroit · (313) 555-2100 · Ref permit #DET-24-11892</div>
+            </div>
+            <span class="task-priority priority-medium">Today</span>
+          </div>
+          <div class="task-item" onclick="toggleTask(this)">
+            <div class="task-checkbox"></div>
+            <div class="task-content">
+              <div class="task-title">Order cabinets from Michigan Cabinet Co. — 6 week lead time</div>
+              <div class="task-meta">🛒 Delay risks pushing Milestone 5 by 6+ weeks</div>
+            </div>
+            <span class="task-priority priority-medium">Today</span>
+          </div>
+          <div class="task-item" onclick="toggleTask(this)">
+            <div class="task-checkbox"></div>
+            <div class="task-content">
+              <div class="task-title">Confirm plumber (Dave's Plumbing) on site Thursday</div>
+              <div class="task-meta">💬 Last confirmed 3 days ago · Verify before site crew shows up</div>
+            </div>
+            <span class="task-priority priority-low">Today</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== MILESTONES ========== -->
+    <div class="page" id="page-milestones">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Milestones & Payments</div>
+          <div class="page-subtitle">Oakwood Kitchen Remodel · $284,000 total contract</div>
+        </div>
+        <div class="header-actions">
+          <div class="btn">📥 Download Schedule</div>
+          <div class="btn btn-success">💸 Release Milestone 3</div>
+        </div>
+      </div>
+
+      <div class="pay-action-card">
+        <div class="pay-action-left">
+          <div class="pay-action-title">✅ Milestone 3 is Verified — Collect Your Money</div>
+          <div class="pay-action-desc">AI photo verification complete · Owner James approved · Funds are in escrow · Arrives in your account in 400ms via USDC or 1-2 days via bank transfer</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem;">
+          <div class="pay-action-amount">$47,500</div>
+          <div class="btn btn-success" style="white-space:nowrap;">Release Now 💸</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Payment Schedule</div>
+          <div style="font-size:0.82rem;color:var(--text-3);">$142,000 of $284,000 received</div>
+        </div>
+        <div class="progress-wrap" style="margin-top:1rem;">
+          <div class="progress-labels">
+            <span>Progress: 50%</span>
+            <span style="color:var(--text-3);">$142K remaining</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div>
+        </div>
+        <table class="data-table">
+          <thead><tr><th>#</th><th>Milestone</th><th>What You Need to Do</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="td-primary">1</td>
+              <td class="td-primary">Project Start / Mobilization</td>
+              <td style="color:var(--text-3);">— Complete</td>
+              <td style="color:var(--green);font-weight:700;">$28,400</td>
+              <td><span class="pill pill-green">✓ Received Oct 3</span></td>
+              <td><span style="color:var(--text-3);font-size:0.8rem;">Paid</span></td>
+            </tr>
+            <tr>
+              <td class="td-primary">2</td>
+              <td class="td-primary">Demo & Rough Framing</td>
+              <td style="color:var(--text-3);">— Complete</td>
+              <td style="color:var(--green);font-weight:700;">$35,000</td>
+              <td><span class="pill pill-green">✓ Received Oct 18</span></td>
+              <td><span style="color:var(--text-3);font-size:0.8rem;">Paid</span></td>
+            </tr>
+            <tr style="background:var(--green-light);">
+              <td class="td-primary">3</td>
+              <td class="td-primary" style="color:var(--green)">Drywall & MEP Rough-In ⭐</td>
+              <td style="color:var(--green);font-size:0.82rem;font-weight:600;">Submit lien waiver from Tony's Electric → Collect</td>
+              <td style="color:var(--green);font-weight:800;font-size:1rem;">$47,500</td>
+              <td><span class="pill pill-green">✅ Approved — Ready</span></td>
+              <td><div class="btn btn-success" style="padding:0.35rem 0.85rem;font-size:0.8rem;">Collect $47,500</div></td>
+            </tr>
+            <tr>
+              <td class="td-primary">4</td>
+              <td class="td-primary">Insulation & Drywall Finish</td>
+              <td style="font-size:0.82rem;">Upload photos when complete</td>
+              <td style="font-weight:700;">$42,300</td>
+              <td><span class="pill pill-yellow">⏳ In Progress</span></td>
+              <td><div class="btn" style="padding:0.35rem 0.85rem;font-size:0.8rem;">Upload Photos</div></td>
+            </tr>
+            <tr>
+              <td class="td-primary">5</td>
+              <td class="td-primary">Cabinets & Fixtures</td>
+              <td style="font-size:0.82rem;color:var(--text-3);">Not started</td>
+              <td style="font-weight:700;">$78,800</td>
+              <td><span class="pill pill-gray">🔒 Locked</span></td>
+              <td style="color:var(--text-3);font-size:0.8rem;">—</td>
+            </tr>
+            <tr>
+              <td class="td-primary">6</td>
+              <td class="td-primary">Final Walkthrough & Punch List</td>
+              <td style="font-size:0.82rem;color:var(--text-3);">Not started</td>
+              <td style="font-weight:700;">$52,000</td>
+              <td><span class="pill pill-gray">🔒 Locked</span></td>
+              <td style="color:var(--text-3);font-size:0.8rem;">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ========== PHOTOS ========== -->
+    <div class="page" id="page-photos">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Photos & Documents</div>
+          <div class="page-subtitle">GPS-verified job site documentation</div>
+        </div>
+        <div class="header-actions">
+          <div class="btn btn-primary">📸 Upload Photos</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📸 Milestone 3 — Drywall & MEP Rough-In</div>
+          <span class="pill pill-green">✓ Verified for Payment</span>
+        </div>
+        <div style="padding:0 0.5rem;">
+          <div class="ai-insight">
+            <div class="ai-chip">AI</div>
+            <div class="ai-text">All 3 photos verified — GPS location matches job site, timestamp valid, work matches milestone scope description. <strong>Milestone 3 is approved for payment.</strong></div>
+          </div>
+        </div>
+        <div class="photo-grid">
+          <div class="photo-real"><div style="background:linear-gradient(135deg,#cbd5e1,#94a3b8);min-height:120px;display:flex;align-items:center;justify-content:center;font-size:3rem;">🧱</div><div class="photo-badge">✓ Verified</div></div>
+          <div class="photo-real"><div style="background:linear-gradient(135deg,#a3c4bc,#7fb3a5);min-height:120px;display:flex;align-items:center;justify-content:center;font-size:3rem;">🏗️</div><div class="photo-badge">✓ Verified</div></div>
+          <div class="photo-real"><div style="background:linear-gradient(135deg,#d4a5a5,#b78888);min-height:120px;display:flex;align-items:center;justify-content:center;font-size:3rem;">⚡</div><div class="photo-badge">✓ Verified</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== CHANGE ORDERS ========== -->
+    <div class="page" id="page-changeorders">
+      <div class="page-header">
+        <div>
+          <div class="page-title">Change Orders</div>
+          <div class="page-subtitle">Track scope changes and get them approved fast</div>
+        </div>
+        <div class="header-actions">
+          <div class="btn btn-primary">+ New Change Order</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Change Order Log</div>
+          <div style="font-size:0.82rem;color:var(--yellow);font-weight:600;">$8,200 pending approval</div>
+        </div>
+        <div>
+          <div class="co-item">
+            <div class="co-number">CO-004</div>
+            <div class="co-content">
+              <div class="co-title">Additional HVAC ductwork — Master bath reroute</div>
+              <div class="co-meta">Submitted yesterday · Waiting on James Thornton to approve</div>
+            </div>
+            <div class="co-right">
+              <div class="co-amount">+$8,200</div>
+              <div class="co-status" style="color:var(--yellow)">⏳ Pending</div>
+            </div>
+          </div>
+          <div class="co-item">
+            <div class="co-number">CO-003</div>
+            <div class="co-content">
+              <div class="co-title">Upgraded tile — Owner selected premium Carrara</div>
+              <div class="co-meta">Approved Oct 15 · Added to Milestone 5</div>
+            </div>
+            <div class="co-right">
+              <div class="co-amount">+$3,400</div>
+              <div class="co-status" style="color:var(--green)">✓ Approved</div>
+            </div>
+          </div>
+          <div class="co-item">
+            <div class="co-number">CO-002</div>
+            <div class="co-content">
+              <div class="co-title">Subfloor repair — discovered rot during demo</div>
+              <div class="co-meta">Approved Oct 9 · Added to Milestone 2</div>
+            </div>
+            <div class="co-right">
+              <div class="co-amount">+$1,800</div>
+              <div class="co-status" style="color:var(--green)">✓ Approved</div>
+            </div>
+          </div>
+          <div class="co-item">
+            <div class="co-number">CO-001</div>
+            <div class="co-content">
+              <div class="co-title">Island addition — owner changed scope after contract</div>
+              <div class="co-meta">Rejected Oct 5 · See notes</div>
+            </div>
+            <div class="co-right">
+              <div class="co-amount">+$12,000</div>
+              <div class="co-status" style="color:var(--red)">✗ Rejected</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SCHEDULE ========== -->
+    <div class="page" id="page-schedule">
+      <div class="page-header">
+        <div><div class="page-title">Schedule</div><div class="page-subtitle">Project timeline · Oakwood Kitchen</div></div>
+        <div class="header-actions"><div class="btn btn-primary">+ Add Event</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">📅 Upcoming This Week</div></div>
+        <table class="data-table">
+          <thead><tr><th>Date</th><th>What</th><th>Who</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td class="td-primary">Today</td><td>Electrical rough-in inspection call</td><td>Mike (you)</td><td><span class="pill pill-yellow">To Do</span></td></tr>
+            <tr><td class="td-primary">Wed Oct 25</td><td>Plumber on site — rough-in</td><td>Dave's Plumbing</td><td><span class="pill pill-purple">Confirm</span></td></tr>
+            <tr><td class="td-primary">Thu Oct 26</td><td>City inspection — electrical rough-in</td><td>Inspector</td><td><span class="pill pill-yellow">Pending</span></td></tr>
+            <tr><td class="td-primary">Fri Oct 27</td><td>Insulation crew starts</td><td>Great Lakes Insulation</td><td><span class="pill pill-green">Confirmed</span></td></tr>
+            <tr><td class="td-primary">Nov 3</td><td>Drywall finish crew — Phase 2</td><td>TBD</td><td><span class="pill pill-gray">Not Booked</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ========== SUBS ========== -->
+    <div class="page" id="page-subs">
+      <div class="page-header">
+        <div><div class="page-title">Subcontractors</div><div class="page-subtitle">Track who's on site and what they're owed</div></div>
+        <div class="header-actions"><div class="btn btn-primary">+ Add Sub</div></div>
+      </div>
+      <div class="card">
+        <table class="data-table">
+          <thead><tr><th>Subcontractor</th><th>Trade</th><th>Status</th><th>Lien Waiver</th><th>Amount Owed</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="td-primary">Tony's Electric</td>
+              <td>Electrical</td>
+              <td><span class="pill pill-yellow">⏳ Work Done</span></td>
+              <td><span class="pill pill-red">⚠ Missing — Blocks Your Pay</span></td>
+              <td class="amount-green">$12,400</td>
+              <td><div class="btn" style="padding:0.35rem 0.85rem;font-size:0.8rem;">Request Waiver</div></td>
+            </tr>
+            <tr>
+              <td class="td-primary">Dave's Plumbing</td>
+              <td>Plumbing</td>
+              <td><span class="pill pill-purple">Scheduled Thu</span></td>
+              <td><span class="pill pill-gray">Not Yet Due</span></td>
+              <td>$8,800</td>
+              <td><div class="btn" style="padding:0.35rem 0.85rem;font-size:0.8rem;">Message</div></td>
+            </tr>
+            <tr>
+              <td class="td-primary">Great Lakes Insulation</td>
+              <td>Insulation</td>
+              <td><span class="pill pill-green">Starts Fri</span></td>
+              <td><span class="pill pill-gray">Not Yet Due</span></td>
+              <td>$6,200</td>
+              <td><div class="btn" style="padding:0.35rem 0.85rem;font-size:0.8rem;">Message</div></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ========== LIEN WAIVERS ========== -->
+    <div class="page" id="page-lien">
+      <div class="page-header">
+        <div><div class="page-title">Lien Waivers</div><div class="page-subtitle">Protect yourself and get paid faster</div></div>
+        <div class="header-actions"><div class="btn btn-primary">+ Request Waiver</div></div>
+      </div>
+      <div class="overdue-card" style="margin-bottom:1.25rem;">
+        <div class="overdue-left">
+          <div class="overdue-title">⚠️ Tony's Electric lien waiver is missing</div>
+          <div class="overdue-desc">This is blocking your $47,500 Milestone 3 payment. Request it now — takes 2 minutes.</div>
+        </div>
+        <div class="btn btn-primary">Request Now</div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">🔏 Lien Waiver Status</div></div>
+        <div>
+          <div class="lien-item">
+            <span class="lien-icon">🔴</span>
+            <div class="lien-content">
+              <div class="lien-title">Tony's Electric — Conditional Waiver (Milestone 3)</div>
+              <div class="lien-meta">Requested today · Not yet signed</div>
+            </div>
+            <span class="pill pill-red">Missing</span>
+          </div>
+          <div class="lien-item">
+            <span class="lien-icon">🟡</span>
+            <div class="lien-content">
+              <div class="lien-title">Dave's Plumbing — Conditional Waiver (Milestone 4)</div>
+              <div class="lien-meta">Will be needed after rough-in completes · Not yet requested</div>
+            </div>
+            <span class="pill pill-yellow">Upcoming</span>
+          </div>
+          <div class="lien-item">
+            <span class="lien-icon">✅</span>
+            <div class="lien-content">
+              <div class="lien-title">Detroit Demo Crew — Unconditional Waiver (Milestone 2)</div>
+              <div class="lien-meta">Signed Oct 18</div>
+            </div>
+            <span class="pill pill-green">Signed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== BUDGET ========== -->
+    <div class="page" id="page-budget">
+      <div class="page-header">
+        <div><div class="page-title">Budget Tracker</div><div class="page-subtitle">Are you on track to make money on this job?</div></div>
+        <div class="header-actions"><div class="btn btn-primary">+ Add Cost</div></div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-top"><div class="stat-icon purple">💰</div><span class="stat-trend up">On Track</span></div><div class="stat-value">$284K</div><div class="stat-label">Contract Value</div></div>
+        <div class="stat-card"><div class="stat-top"><div class="stat-icon red">💸</div><span class="stat-trend neutral">50% spent</span></div><div class="stat-value">$138K</div><div class="stat-label">Costs to Date</div></div>
+        <div class="stat-card"><div class="stat-top"><div class="stat-icon green">📈</div><span class="stat-trend up">↑ Healthy</span></div><div class="stat-value">$4,200</div><div class="stat-label">Ahead of Budget</div></div>
+        <div class="stat-card"><div class="stat-top"><div class="stat-icon yellow">🔮</div><span class="stat-trend neutral">Projected</span></div><div class="stat-value">$41,800</div><div class="stat-label">Projected Profit</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">📊 Cost Breakdown by Category</div></div>
+        <table class="data-table">
+          <thead><tr><th>Category</th><th>Budgeted</th><th>Actual</th><th>Remaining</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td class="td-primary">Labor — Direct</td><td>$85,000</td><td>$41,200</td><td>$43,800</td><td><span class="pill pill-green">Under Budget</span></td></tr>
+            <tr><td class="td-primary">Materials</td><td>$94,000</td><td>$52,400</td><td>$41,600</td><td><span class="pill pill-green">On Track</span></td></tr>
+            <tr><td class="td-primary">Subcontractors</td><td>$47,200</td><td>$31,800</td><td>$15,400</td><td><span class="pill pill-yellow">Watch</span></td></tr>
+            <tr><td class="td-primary">Equipment Rental</td><td>$8,400</td><td>$7,100</td><td>$1,300</td><td><span class="pill pill-yellow">Watch</span></td></tr>
+            <tr><td class="td-primary">Permits & Fees</td><td>$5,200</td><td>$5,400</td><td style="color:var(--red);font-weight:700;">-$200</td><td><span class="pill pill-red">Over Budget</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ========== COMPLIANCE ========== -->
+    <div class="page" id="page-compliance">
+      <div class="page-header">
+        <div><div class="page-title">Compliance</div><div class="page-subtitle">Permits, inspections, and documentation</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">✔️ Permit & Inspection Status</div></div>
+        <table class="data-table">
+          <thead><tr><th>Item</th><th>Permit #</th><th>Submitted</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td class="td-primary">Building Permit</td><td style="font-family:monospace;font-size:0.82rem;">DET-24-11892</td><td>Oct 1</td><td><span class="pill pill-green">✓ Approved</span></td><td>—</td></tr>
+            <tr><td class="td-primary">Electrical Rough-In Inspection</td><td style="font-family:monospace;font-size:0.82rem;">—</td><td>Not yet</td><td><span class="pill pill-yellow">⏳ Schedule It</span></td><td><div class="btn" style="padding:0.35rem 0.85rem;font-size:0.8rem;">Call City</div></td></tr>
+            <tr><td class="td-primary">Plumbing Inspection</td><td style="font-family:monospace;font-size:0.82rem;">—</td><td>Not yet</td><td><span class="pill pill-gray">Pending Work</span></td><td>—</td></tr>
+            <tr><td class="td-primary">Insulation Inspection</td><td style="font-family:monospace;font-size:0.82rem;">—</td><td>Not yet</td><td><span class="pill pill-gray">Pending Work</span></td><td>—</td></tr>
+            <tr><td class="td-primary">Final Certificate of Occupancy</td><td style="font-family:monospace;font-size:0.82rem;">—</td><td>Not yet</td><td><span class="pill pill-gray">End of Project</span></td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-item').forEach(n => n.classList.remove('active'));
+  const page = document.getElementById('page-' + id);
+  const nav = document.getElementById('nav-' + id);
+  if (page) page.classList.add('active');
+  if (nav) nav.classList.add('active');
+}
+
+function switchTab(id, el) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function toggleTask(el) {
+  const checkbox = el.querySelector('.task-checkbox');
+  const title = el.querySelector('.task-title');
+  if (checkbox.classList.contains('done')) {
+    checkbox.classList.remove('done');
+    checkbox.textContent = '';
+    title.classList.remove('done');
+  } else {
+    checkbox.classList.add('done');
+    checkbox.textContent = '✓';
+    title.classList.add('done');
+  }
+}
+
+// Animate progress bars on load
+window.addEventListener('load', () => {
+  document.querySelectorAll('.progress-fill').forEach(el => {
+    const w = el.style.width;
+    el.style.width = '0';
+    setTimeout(() => { el.style.width = w; }, 300);
+  });
+});
+</script>
+</body>
+</html>

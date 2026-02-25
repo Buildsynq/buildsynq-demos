@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BuildSynq — Government & Municipal Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple: #6366F1;
+  --purple-dark: #4F46E5;
+  --purple-light: #EEF2FF;
+  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --navy: #1E3A5F;
+  --navy-light: #EFF4FB;
+  --green: #10B981;
+  --green-light: #ECFDF5;
+  --yellow: #F59E0B;
+  --yellow-light: #FFFBEB;
+  --red: #EF4444;
+  --red-light: #FEF2F2;
+  --orange: #F97316;
+  --orange-light: #FFF7ED;
+  --blue: #3B82F6;
+  --blue-light: #EFF6FF;
+  --teal: #0D9488;
+  --teal-light: #F0FDFA;
+  --text: #1E293B;
+  --text-2: #475569;
+  --text-3: #94A3B8;
+  --border: #E2E8F0;
+  --bg: #F8FAFC;
+  --white: #FFFFFF;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-hover: 0 8px 24px rgba(99,102,241,0.1), 0 2px 8px rgba(0,0,0,0.06);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+/* ---- NAV ---- */
+.topnav {
+  background: var(--navy);
+  padding: 0 1.75rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 62px; flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.nav-left { display: flex; align-items: center; gap: 2rem; }
+
+.logo-wrap { display: flex; align-items: center; gap: 0.75rem; }
+.logo { font-size: 1.4rem; font-weight: 900; color: white; letter-spacing: -0.02em; text-decoration: none; }
+.gov-badge {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.9);
+  font-size: 0.65rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.2rem 0.6rem; border-radius: 5px;
+}
+
+.nav-tabs { display: flex; }
+.nav-tab {
+  padding: 0.45rem 1rem; border-radius: 7px;
+  font-size: 0.86rem; font-weight: 600;
+  color: rgba(255,255,255,0.6);
+  cursor: pointer; transition: all 0.15s; border: none; background: none;
+}
+.nav-tab:hover { color: white; background: rgba(255,255,255,0.1); }
+.nav-tab.active { color: white; background: rgba(255,255,255,0.15); }
+
+.nav-right { display: flex; align-items: center; gap: 0.85rem; }
+
+.fiscal-badge {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.8);
+  font-size: 0.75rem; font-weight: 600;
+  padding: 0.3rem 0.75rem; border-radius: 6px;
+  display: flex; align-items: center; gap: 0.4rem;
+}
+
+.alert-pill {
+  display: flex; align-items: center; gap: 0.4rem;
+  background: var(--red); color: white;
+  padding: 0.3rem 0.85rem; border-radius: 20px;
+  font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.15s;
+}
+.alert-pill:hover { background: #dc2626; }
+
+.icon-btn {
+  width: 35px; height: 35px; border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 0.9rem; color: white; position: relative; transition: all 0.15s;
+}
+.icon-btn:hover { background: rgba(255,255,255,0.15); }
+.notif-dot { position: absolute; top: 5px; right: 5px; width: 7px; height: 7px; background: var(--red); border-radius: 50%; border: 1.5px solid var(--navy); }
+
+.user-pill {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.3rem 0.85rem 0.3rem 0.3rem;
+  border-radius: 40px; border: 1px solid rgba(255,255,255,0.2);
+  cursor: pointer; transition: all 0.15s;
+}
+.user-pill:hover { background: rgba(255,255,255,0.08); }
+.avatar { width: 28px; height: 28px; background: var(--gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.68rem; font-weight: 700; color: white; flex-shrink: 0; }
+.user-name { font-size: 0.82rem; font-weight: 600; color: white; }
+
+/* ---- LAYOUT ---- */
+.body-wrap { display: flex; flex: 1; overflow: hidden; }
+
+/* ---- SIDEBAR ---- */
+.sidebar {
+  width: 230px; background: var(--white);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; flex-shrink: 0;
+  overflow-y: auto; padding: 1.25rem 0.9rem;
+}
+.sidebar::-webkit-scrollbar { width: 3px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border); }
+
+.sb-section { font-size: 0.64rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); padding: 0.85rem 0.75rem 0.35rem; }
+
+.sb-item {
+  display: flex; align-items: center; gap: 0.7rem;
+  padding: 0.6rem 0.75rem; border-radius: 9px;
+  cursor: pointer; transition: all 0.15s;
+  font-size: 0.86rem; font-weight: 500; color: var(--text-2); margin-bottom: 1px;
+}
+.sb-item:hover { background: var(--navy-light); color: var(--navy); }
+.sb-item.active { background: var(--navy-light); color: var(--navy); font-weight: 700; }
+.sb-icon { font-size: 0.95rem; width: 18px; text-align: center; }
+
+.sb-badge {
+  margin-left: auto; font-size: 0.64rem; font-weight: 700;
+  padding: 0.12rem 0.45rem; border-radius: 20px;
+}
+.sb-badge.red { background: var(--red); color: white; }
+.sb-badge.yellow { background: var(--yellow); color: #1a0e00; }
+.sb-badge.green { background: var(--green); color: white; }
+.sb-badge.blue { background: var(--blue); color: white; }
+.sb-badge.gray { background: var(--bg); color: var(--text-3); border: 1px solid var(--border); }
+
+.sb-divider { height: 1px; background: var(--border); margin: 0.6rem 0; }
+
+.jurisdiction-box {
+  background: var(--navy-light);
+  border: 1px solid rgba(30,58,95,0.12);
+  border-radius: 10px; padding: 0.85rem; margin-bottom: 1.1rem;
+}
+.jur-label { font-size: 0.64rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); margin-bottom: 0.35rem; }
+.jur-name { font-size: 0.88rem; font-weight: 800; color: var(--navy); }
+.jur-sub { font-size: 0.73rem; color: var(--text-3); margin-top: 0.15rem; }
+.jur-fy { font-size: 0.72rem; font-weight: 600; color: var(--purple); margin-top: 0.3rem; }
+
+/* ---- MAIN ---- */
+.main { flex: 1; overflow-y: auto; padding: 1.75rem; }
+.main::-webkit-scrollbar { width: 4px; }
+.main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ---- PAGES ---- */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ---- PAGE HEADER ---- */
+.page-hdr { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.5rem; }
+.page-title { font-size: 1.4rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
+.page-sub { font-size: 0.84rem; color: var(--text-3); margin-top: 0.2rem; }
+.hdr-actions { display: flex; gap: 0.6rem; }
+
+/* ---- BUTTONS ---- */
+.btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.55rem 1.1rem; border-radius: 9px;
+  font-size: 0.85rem; font-weight: 600;
+  cursor: pointer; transition: all 0.15s;
+  border: 1px solid var(--border); background: var(--white); color: var(--text-2);
+}
+.btn:hover { background: var(--bg); }
+.btn-navy { background: var(--navy); color: white; border-color: var(--navy); }
+.btn-navy:hover { background: #162d4a; }
+.btn-primary { background: var(--purple); color: white; border-color: var(--purple); }
+.btn-primary:hover { background: var(--purple-dark); }
+.btn-success { background: var(--green); color: white; border-color: var(--green); }
+.btn-success:hover { background: #059669; }
+.btn-sm { padding: 0.35rem 0.75rem; font-size: 0.78rem; }
+
+/* ---- KPI ROW ---- */
+.kpi-row {
+  display: grid; grid-template-columns: repeat(5,1fr);
+  gap: 0.85rem; margin-bottom: 1.25rem;
+}
+
+.kpi-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 13px; padding: 1.1rem 1.25rem;
+  box-shadow: var(--shadow); transition: all 0.2s; position: relative; overflow: hidden;
+}
+.kpi-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-1px); }
+.kpi-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 13px 13px 0 0; }
+.kpi-card.navy::after { background: var(--navy); }
+.kpi-card.green::after { background: var(--green); }
+.kpi-card.yellow::after { background: var(--yellow); }
+.kpi-card.red::after { background: var(--red); }
+.kpi-card.purple::after { background: var(--purple); }
+.kpi-card.teal::after { background: var(--teal); }
+
+.kpi-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.6rem; }
+.kpi-icon { font-size: 1.2rem; }
+.kpi-trend { font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.4rem; border-radius: 5px; }
+.kpi-trend.good { background: var(--green-light); color: var(--green); }
+.kpi-trend.warn { background: var(--yellow-light); color: var(--yellow); }
+.kpi-trend.bad { background: var(--red-light); color: var(--red); }
+.kpi-trend.info { background: var(--blue-light); color: var(--blue); }
+.kpi-val { font-size: 1.5rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; line-height: 1; margin-bottom: 0.25rem; }
+.kpi-lbl { font-size: 0.75rem; color: var(--text-3); font-weight: 500; }
+
+/* ---- CARD ---- */
+.card { background: var(--white); border: 1px solid var(--border); border-radius: 13px; box-shadow: var(--shadow); overflow: hidden; }
+.card-header { display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 1.4rem; border-bottom: 1px solid var(--border); }
+.card-title { font-size: 0.92rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 0.5rem; }
+.card-action { font-size: 0.8rem; color: var(--purple); font-weight: 600; cursor: pointer; }
+.card-action:hover { text-decoration: underline; }
+
+/* ---- LAYOUTS ---- */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-bottom: 1rem; }
+.grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+.col { display: flex; flex-direction: column; gap: 1rem; }
+
+/* ---- PILLS ---- */
+.pill { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.73rem; font-weight: 600; }
+.pill-green { background: var(--green-light); color: var(--green); }
+.pill-yellow { background: var(--yellow-light); color: #92400E; }
+.pill-red { background: var(--red-light); color: var(--red); }
+.pill-orange { background: var(--orange-light); color: var(--orange); }
+.pill-purple { background: var(--purple-light); color: var(--purple); }
+.pill-navy { background: var(--navy-light); color: var(--navy); }
+.pill-gray { background: var(--bg); color: var(--text-3); border: 1px solid var(--border); }
+.pill-blue { background: var(--blue-light); color: var(--blue); }
+.pill-teal { background: var(--teal-light); color: var(--teal); }
+
+/* ---- TABLE ---- */
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th { text-align: left; font-size: 0.71rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-3); padding: 0.7rem 1.4rem; background: var(--bg); border-bottom: 1px solid var(--border); white-space: nowrap; }
+.data-table td { padding: 0.9rem 1.4rem; font-size: 0.84rem; color: var(--text-2); border-bottom: 1px solid rgba(0,0,0,0.04); vertical-align: middle; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: rgba(30,58,95,0.02); }
+.td-bold { color: var(--text) !important; font-weight: 600 !important; }
+.td-mono { font-family: 'Courier New', monospace; font-size: 0.8rem !important; }
+.td-green { color: var(--green); font-weight: 700; }
+.td-red { color: var(--red); font-weight: 700; }
+.td-yellow { color: var(--yellow); font-weight: 700; }
+.td-navy { color: var(--navy); font-weight: 700; }
+
+/* ---- ALERT STRIP ---- */
+.alert-strip {
+  background: var(--red-light); border: 1px solid rgba(239,68,68,0.2);
+  border-radius: 12px; padding: 1rem 1.4rem;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1.25rem; gap: 1rem;
+}
+.alert-strip.yellow { background: var(--yellow-light); border-color: rgba(245,158,11,0.25); }
+.alert-strip-title { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 0.2rem; display: flex; align-items: center; gap: 0.5rem; }
+.alert-strip-desc { font-size: 0.8rem; color: var(--text-2); }
+
+/* ---- DBE METER ---- */
+.dbe-meter {
+  padding: 1.1rem 1.4rem;
+}
+.dbe-row { margin-bottom: 1rem; }
+.dbe-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem; }
+.dbe-label { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+.dbe-pct { font-size: 0.82rem; font-weight: 800; }
+.dbe-track { height: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; position: relative; }
+.dbe-fill { height: 100%; border-radius: 10px; transition: width 0.6s ease; }
+.dbe-target-line { position: absolute; top: 0; bottom: 0; width: 2px; background: rgba(0,0,0,0.25); }
+.dbe-note { font-size: 0.72rem; color: var(--text-3); margin-top: 0.3rem; display: flex; align-items: center; justify-content: space-between; }
+
+/* ---- BID CARD ---- */
+.bid-card {
+  padding: 1.1rem 1.4rem; border-bottom: 1px solid rgba(0,0,0,0.05);
+  cursor: pointer; transition: background 0.1s;
+}
+.bid-card:hover { background: var(--bg); }
+.bid-card:last-child { border-bottom: none; }
+.bid-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 0.5rem; gap: 1rem; }
+.bid-title { font-size: 0.88rem; font-weight: 700; color: var(--text); line-height: 1.4; }
+.bid-value { font-size: 1rem; font-weight: 800; color: var(--navy); white-space: nowrap; }
+.bid-meta { display: flex; gap: 1.1rem; font-size: 0.75rem; color: var(--text-3); margin-bottom: 0.5rem; font-family: 'Courier New', monospace; }
+.bid-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+
+/* ---- FUNDING BARS ---- */
+.fund-row { display: flex; align-items: center; gap: 0.85rem; padding: 0.6rem 1.4rem; }
+.fund-label { font-size: 0.8rem; font-weight: 600; color: var(--text-2); width: 160px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fund-track { flex: 1; height: 8px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.fund-fill { height: 100%; border-radius: 10px; }
+.fund-amount { font-size: 0.8rem; font-weight: 700; width: 80px; text-align: right; flex-shrink: 0; }
+
+/* ---- ACTIVITY ---- */
+.act-item { display: flex; gap: 0.85rem; padding: 0.85rem 1.4rem; border-bottom: 1px solid rgba(0,0,0,0.04); align-items: flex-start; }
+.act-item:last-child { border-bottom: none; }
+.act-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+.act-body { flex: 1; }
+.act-text { font-size: 0.83rem; color: var(--text-2); line-height: 1.5; }
+.act-text strong { color: var(--text); font-weight: 600; }
+.act-time { font-size: 0.7rem; color: var(--text-3); margin-top: 0.15rem; }
+.act-proj { font-size: 0.7rem; color: var(--navy); font-weight: 600; background: var(--navy-light); padding: 0.1rem 0.4rem; border-radius: 4px; }
+
+/* ---- AI BOX ---- */
+.ai-box {
+  background: linear-gradient(135deg, rgba(99,102,241,0.05), rgba(118,75,162,0.04));
+  border: 1px solid rgba(99,102,241,0.15);
+  border-radius: 10px; padding: 0.9rem 1.1rem;
+  display: flex; gap: 0.75rem; margin: 0 1.4rem 1rem;
+}
+.ai-tag { background: var(--purple); color: white; font-size: 0.6rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 5px; height: fit-content; white-space: nowrap; margin-top: 1px; }
+.ai-txt { font-size: 0.82rem; color: var(--text-2); line-height: 1.6; }
+.ai-txt strong { color: var(--purple-dark); }
+
+/* ---- SCORE RING ---- */
+.score-ring { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 800; flex-shrink: 0; }
+
+/* ---- COMPLIANCE CHECK ---- */
+.check-item { display: flex; align-items: center; gap: 0.85rem; padding: 0.85rem 1.4rem; border-bottom: 1px solid rgba(0,0,0,0.04); cursor: pointer; transition: background 0.1s; }
+.check-item:hover { background: var(--bg); }
+.check-item:last-child { border-bottom: none; }
+.check-icon { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0; }
+.check-body { flex: 1; }
+.check-title { font-size: 0.87rem; font-weight: 600; color: var(--text); margin-bottom: 0.15rem; }
+.check-sub { font-size: 0.75rem; color: var(--text-3); }
+
+/* ---- AUDIT TRAIL ---- */
+.audit-row { display: flex; gap: 1rem; padding: 0.85rem 1.4rem; border-bottom: 1px solid rgba(0,0,0,0.04); align-items: flex-start; }
+.audit-row:last-child { border-bottom: none; }
+.audit-time-col { width: 130px; flex-shrink: 0; }
+.audit-time { font-size: 0.73rem; font-family: 'Courier New', monospace; color: var(--text-3); }
+.audit-user { font-size: 0.72rem; font-weight: 700; color: var(--navy); }
+.audit-action { font-size: 0.84rem; color: var(--text-2); flex: 1; line-height: 1.5; }
+.audit-action strong { color: var(--text); font-weight: 600; }
+.audit-hash { font-size: 0.68rem; font-family: 'Courier New', monospace; color: var(--text-3); background: var(--bg); padding: 0.1rem 0.4rem; border-radius: 4px; border: 1px solid var(--border); margin-top: 0.2rem; display: inline-block; }
+
+/* ---- PBAR ---- */
+.pbar-wrap { margin: 0 1.4rem 1.1rem; }
+.pbar-labels { display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-3); margin-bottom: 0.35rem; font-weight: 500; }
+.pbar { height: 7px; background: var(--border); border-radius: 10px; overflow: hidden; }
+.pbar-fill { height: 100%; border-radius: 10px; background: var(--gradient); transition: width 0.6s ease; }
+
+/* ---- FILTER ROW ---- */
+.filter-row { display: flex; gap: 0.6rem; margin-bottom: 1.25rem; align-items: center; flex-wrap: wrap; }
+.filter-chip { padding: 0.38rem 0.85rem; border-radius: 8px; border: 1px solid var(--border); background: var(--white); font-size: 0.81rem; font-weight: 500; color: var(--text-2); cursor: pointer; transition: all 0.15s; }
+.filter-chip:hover { border-color: var(--navy); color: var(--navy); }
+.filter-chip.active { background: var(--navy-light); border-color: rgba(30,58,95,0.3); color: var(--navy); font-weight: 700; }
+.filter-right { margin-left: auto; font-size: 0.78rem; color: var(--text-3); }
+
+/* ---- MINI PROGRESS IN TABLE ---- */
+.mini-bar { height: 5px; background: var(--border); border-radius: 4px; overflow: hidden; min-width: 80px; }
+.mini-fill { height: 100%; border-radius: 4px; }
+
+/* ---- FOIA STATUS ---- */
+.foia-item { display: flex; align-items: center; gap: 1rem; padding: 0.9rem 1.4rem; border-bottom: 1px solid rgba(0,0,0,0.04); cursor: pointer; transition: background 0.1s; }
+.foia-item:hover { background: var(--bg); }
+.foia-item:last-child { border-bottom: none; }
+
+/* ---- GRANT CARD ---- */
+.grant-card { padding: 1.1rem 1.4rem; border-bottom: 1px solid rgba(0,0,0,0.05); cursor: pointer; transition: background 0.1s; }
+.grant-card:hover { background: var(--bg); }
+.grant-card:last-child { border-bottom: none; }
+.grant-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.4rem; gap: 1rem; }
+.grant-name { font-size: 0.88rem; font-weight: 700; color: var(--text); line-height: 1.4; }
+.grant-amount { font-size: 1rem; font-weight: 800; color: var(--navy); white-space: nowrap; }
+.grant-meta { font-size: 0.75rem; color: var(--text-3); margin-bottom: 0.5rem; display: flex; gap: 1rem; }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="nav-left">
+    <div class="logo-wrap">
+      <a href="#" class="logo">BuildSynq</a>
+      <span class="gov-badge">Government Portal</span>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="switchMainTab(this)">Overview</button>
+      <button class="nav-tab" onclick="switchMainTab(this)">Procurement</button>
+      <button class="nav-tab" onclick="switchMainTab(this)">Compliance</button>
+      <button class="nav-tab" onclick="switchMainTab(this)">Reporting</button>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="fiscal-badge">📅 FY2026 · Q1</div>
+    <div class="alert-pill" onclick="showPage('alerts', document.getElementById('nav-alerts'))">⚠️ 4 Compliance Issues</div>
+    <div class="icon-btn">🔔<div class="notif-dot"></div></div>
+    <div class="user-pill">
+      <div class="avatar">DPW</div>
+      <span class="user-name">City of Detroit — DPW</span>
+    </div>
+  </div>
+</nav>
+
+<div class="body-wrap">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="jurisdiction-box">
+    <div class="jur-label">Jurisdiction</div>
+    <div class="jur-name">City of Detroit</div>
+    <div class="jur-sub">Dept. of Public Works</div>
+    <div class="jur-fy">FY2026 · Capital Budget: $284M</div>
+  </div>
+
+  <div class="sb-section">Capital Program</div>
+  <div class="sb-item active" id="nav-home" onclick="showPage('home', this)"><span class="sb-icon">🏛️</span> CIP Dashboard</div>
+  <div class="sb-item" id="nav-projects" onclick="showPage('projects', this)"><span class="sb-icon">🏗️</span> Active Projects <span class="sb-badge blue">14</span></div>
+  <div class="sb-item" id="nav-budget" onclick="showPage('budget', this)"><span class="sb-icon">💰</span> Budget Tracking</div>
+  <div class="sb-item" id="nav-grants" onclick="showPage('grants', this)"><span class="sb-icon">🏦</span> Grants & Funding</div>
+
+  <div class="sb-section">Procurement</div>
+  <div class="sb-item" id="nav-bids" onclick="showPage('bids', this)"><span class="sb-icon">📋</span> Active Bid Solicitations <span class="sb-badge blue">6</span></div>
+  <div class="sb-item" id="nav-awards" onclick="showPage('awards', this)"><span class="sb-icon">🏆</span> Contract Awards <span class="sb-badge yellow">3</span></div>
+  <div class="sb-item" id="nav-vendors" onclick="showPage('vendors', this)"><span class="sb-icon">👷</span> Approved Vendors</div>
+
+  <div class="sb-section">Compliance</div>
+  <div class="sb-item" id="nav-alerts" onclick="showPage('alerts', this)"><span class="sb-icon">⚠️</span> Compliance Alerts <span class="sb-badge red">4</span></div>
+  <div class="sb-item" id="nav-dbe" onclick="showPage('dbe', this)"><span class="sb-icon">📊</span> DBE / MBE Tracking</div>
+  <div class="sb-item" id="nav-prevwage" onclick="showPage('prevwage', this)"><span class="sb-icon">👔</span> Prevailing Wage</div>
+  <div class="sb-item" id="nav-permits" onclick="showPage('permits', this)"><span class="sb-icon">📄</span> Permits & Inspections</div>
+
+  <div class="sb-section">Accountability</div>
+  <div class="sb-item" id="nav-audit" onclick="showPage('audit', this)"><span class="sb-icon">🔒</span> Audit Trail</div>
+  <div class="sb-item" id="nav-foia" onclick="showPage('foia', this)"><span class="sb-icon">📂</span> FOIA Requests <span class="sb-badge yellow">2</span></div>
+  <div class="sb-item" id="nav-reports" onclick="showPage('reports', this)"><span class="sb-icon">📈</span> Reports & Export</div>
+
+  <div class="sb-divider"></div>
+  <div class="sb-item"><span class="sb-icon">⚙️</span> Department Settings</div>
+  <div class="sb-item"><span class="sb-icon">❓</span> Help & Training</div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+<!-- ========== CIP DASHBOARD ========== -->
+<div class="page active" id="page-home">
+  <div class="page-hdr">
+    <div>
+      <div class="page-title">Capital Improvement Program</div>
+      <div class="page-sub">City of Detroit · DPW · FY2026 Overview · Updated just now</div>
+    </div>
+    <div class="hdr-actions">
+      <div class="btn">📥 Export for Council</div>
+      <div class="btn btn-navy">+ New Project</div>
+    </div>
+  </div>
+
+  <!-- COMPLIANCE ALERT -->
+  <div class="alert-strip">
+    <div style="flex:1;">
+      <div class="alert-strip-title">🚨 4 compliance issues require department action</div>
+      <div class="alert-strip-desc">Water Main Project: DBE at 14.2% vs 25% federal requirement · Gratiot Repaving: prevailing wage certified payroll 11 days overdue</div>
+    </div>
+    <div style="display:flex;gap:0.6rem;">
+      <div class="btn btn-sm" onclick="showPage('alerts', document.getElementById('nav-alerts'))">View All Issues</div>
+      <div class="btn btn-sm btn-navy">Resolve Now</div>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-row">
+    <div class="kpi-card navy">
+      <div class="kpi-top"><span class="kpi-icon">🏛️</span><span class="kpi-trend info">FY2026</span></div>
+      <div class="kpi-val">$284M</div>
+      <div class="kpi-lbl">Total CIP Budget</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-top"><span class="kpi-icon">💵</span><span class="kpi-trend good">62% utilized</span></div>
+      <div class="kpi-val">$176M</div>
+      <div class="kpi-lbl">Encumbered / Contracted</div>
+    </div>
+    <div class="kpi-card yellow">
+      <div class="kpi-top"><span class="kpi-icon">⏳</span><span class="kpi-trend warn">5 pending</span></div>
+      <div class="kpi-val">$38M</div>
+      <div class="kpi-lbl">Awaiting Council Approval</div>
+    </div>
+    <div class="kpi-card red">
+      <div class="kpi-top"><span class="kpi-icon">📊</span><span class="kpi-trend bad">Below target</span></div>
+      <div class="kpi-val">18.4%</div>
+      <div class="kpi-lbl">Portfolio DBE Average</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-top"><span class="kpi-icon">📋</span><span class="kpi-trend info">6 open</span></div>
+      <div class="kpi-val">6</div>
+      <div class="kpi-lbl">Active Bid Solicitations</div>
+    </div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="grid-2-1">
+    <!-- Left: Projects Table -->
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🏗️ Active Capital Projects</div>
+          <a class="card-action" onclick="showPage('projects', document.getElementById('nav-projects'))">View All 14 →</a>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr><th>Project</th><th>Budget</th><th>Progress</th><th>DBE %</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="td-bold">Detroit Water Main Replacement</div><div style="font-size:0.73rem;color:var(--text-3);">Gratiot Ave · DWSD Funded</div></td>
+              <td class="td-navy">$42M</td>
+              <td><div style="display:flex;align-items:center;gap:0.5rem;"><div class="mini-bar"><div class="mini-fill" style="width:38%;background:var(--navy)"></div></div><span style="font-size:0.75rem;color:var(--text-3);">38%</span></div></td>
+              <td class="td-red">14.2% ⚠</td>
+              <td><span class="pill pill-red">DBE Issue</span></td>
+            </tr>
+            <tr>
+              <td><div class="td-bold">Gratiot Ave Resurfacing — Phase 2</div><div style="font-size:0.73rem;color:var(--text-3);">MDOT Co-funded · Federal-Aid</div></td>
+              <td class="td-navy">$18M</td>
+              <td><div style="display:flex;align-items:center;gap:0.5rem;"><div class="mini-bar"><div class="mini-fill" style="width:62%;background:var(--green)"></div></div><span style="font-size:0.75rem;color:var(--text-3);">62%</span></div></td>
+              <td class="td-yellow">22.1%</td>
+              <td><span class="pill pill-orange">Payroll Late</span></td>
+            </tr>
+            <tr>
+              <td><div class="td-bold">Eastern Market Renovation</div><div style="font-size:0.73rem;color:var(--text-3);">General Fund · Historic Preservation</div></td>
+              <td class="td-navy">$12M</td>
+              <td><div style="display:flex;align-items:center;gap:0.5rem;"><div class="mini-bar"><div class="mini-fill" style="width:71%;background:var(--green)"></div></div><span style="font-size:0.75rem;color:var(--text-3);">71%</span></div></td>
+              <td class="td-green">28.4%</td>
+              <td><span class="pill pill-green">✓ Compliant</span></td>
+            </tr>
+            <tr>
+              <td><div class="td-bold">Jefferson Ave Streetscape</div><div style="font-size:0.73rem;color:var(--text-3);">TIGER Grant · Federal</div></td>
+              <td class="td-navy">$9M</td>
+              <td><div style="display:flex;align-items:center;gap:0.5rem;"><div class="mini-bar"><div class="mini-fill" style="width:44%;background:var(--blue)"></div></div><span style="font-size:0.75rem;color:var(--text-3);">44%</span></div></td>
+              <td class="td-green">31.2%</td>
+              <td><span class="pill pill-green">✓ Compliant</span></td>
+            </tr>
+            <tr>
+              <td><div class="td-bold">Fitzgerald Neighborhood Infra.</div><div style="font-size:0.73rem;color:var(--text-3);">HUD CDBG · Community Dev.</div></td>
+              <td class="td-navy">$6.5M</td>
+              <td><div style="display:flex;align-items:center;gap:0.5rem;"><div class="mini-bar"><div class="mini-fill" style="width:19%;background:var(--purple)"></div></div><span style="font-size:0.75rem;color:var(--text-3);">19%</span></div></td>
+              <td class="td-green">34.8%</td>
+              <td><span class="pill pill-teal">Early Stage</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Activity Feed -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📡 Department Activity Log</div>
+          <a class="card-action" onclick="showPage('audit', document.getElementById('nav-audit'))">Full Audit Trail →</a>
+        </div>
+        <div>
+          <div class="act-item">
+            <div class="act-dot" style="background:var(--red)"></div>
+            <div class="act-body">
+              <div class="act-text"><strong>DBE non-compliance flagged by AI</strong> — Water Main project at 14.2%, federal minimum is 25%</div>
+              <div style="display:flex;gap:0.5rem;margin-top:0.2rem;"><span class="act-time">Today, 9:04 AM</span><span class="act-proj">Water Main</span></div>
+            </div>
+          </div>
+          <div class="act-item">
+            <div class="act-dot" style="background:var(--yellow)"></div>
+            <div class="act-body">
+              <div class="act-text"><strong>Certified payroll not submitted</strong> — Roncelli Inc., Gratiot Ave Week 14 — 11 days overdue</div>
+              <div style="display:flex;gap:0.5rem;margin-top:0.2rem;"><span class="act-time">Today, 7:30 AM</span><span class="act-proj">Gratiot Repaving</span></div>
+            </div>
+          </div>
+          <div class="act-item">
+            <div class="act-dot" style="background:var(--green)"></div>
+            <div class="act-body">
+              <div class="act-text"><strong>$2.4M payment released</strong> — Eastern Market Milestone 4 · All waivers filed · Blockchain receipt #7f3a</div>
+              <div style="display:flex;gap:0.5rem;margin-top:0.2rem;"><span class="act-time">Yesterday, 2:15 PM</span><span class="act-proj">Eastern Market</span></div>
+            </div>
+          </div>
+          <div class="act-item">
+            <div class="act-dot" style="background:var(--blue)"></div>
+            <div class="act-body">
+              <div class="act-text"><strong>Bid solicitation published</strong> — Mack Ave Water Service Upgrade · SAM.gov + Michigan Buys posted</div>
+              <div style="display:flex;gap:0.5rem;margin-top:0.2rem;"><span class="act-time">Oct 22</span><span class="act-proj">New Bid</span></div>
+            </div>
+          </div>
+          <div class="act-item">
+            <div class="act-dot" style="background:var(--purple)"></div>
+            <div class="act-body">
+              <div class="act-text"><strong>Council approval received</strong> — Jefferson Ave Ph.3 · $9M authorized · Resolution #2025-1142</div>
+              <div style="display:flex;gap:0.5rem;margin-top:0.2rem;"><span class="act-time">Oct 21</span><span class="act-proj">Jefferson Ave</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: DBE + Funding -->
+    <div class="col">
+      <!-- DBE Summary -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📊 DBE / MBE Status</div>
+          <a class="card-action" onclick="showPage('dbe', document.getElementById('nav-dbe'))">Details →</a>
+        </div>
+        <div style="padding:1rem 1.4rem 0.5rem;">
+          <div style="background:var(--red-light);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:0.75rem;margin-bottom:0.85rem;">
+            <div style="font-size:0.78rem;font-weight:700;color:var(--red);">⚠️ Portfolio DBE at 18.4% — federal target is 25%</div>
+            <div style="font-size:0.72rem;color:var(--text-2);margin-top:0.2rem;">2 projects below threshold — risk of federal funding freeze</div>
+          </div>
+        </div>
+        <div class="dbe-meter">
+          <div class="dbe-row">
+            <div class="dbe-header">
+              <span class="dbe-label">DBE Overall</span>
+              <span class="dbe-pct" style="color:var(--red)">18.4% <span style="font-size:0.7rem;color:var(--text-3);font-weight:500;">/ 25% goal</span></span>
+            </div>
+            <div class="dbe-track">
+              <div class="dbe-fill" style="width:73.6%;background:var(--red)"></div>
+              <div class="dbe-target-line" style="left:100%"></div>
+            </div>
+            <div class="dbe-note"><span>Needs +6.6 pts to reach target</span><span style="color:var(--red);font-weight:700;">Non-compliant</span></div>
+          </div>
+          <div class="dbe-row">
+            <div class="dbe-header">
+              <span class="dbe-label">MBE (Minority)</span>
+              <span class="dbe-pct" style="color:var(--yellow)">11.2% <span style="font-size:0.7rem;color:var(--text-3);font-weight:500;">/ 15% goal</span></span>
+            </div>
+            <div class="dbe-track">
+              <div class="dbe-fill" style="width:74.7%;background:var(--yellow)"></div>
+            </div>
+            <div class="dbe-note"><span>Needs +3.8 pts</span><span style="color:var(--yellow);font-weight:700;">Watch</span></div>
+          </div>
+          <div class="dbe-row" style="margin-bottom:0;">
+            <div class="dbe-header">
+              <span class="dbe-label">WBE (Women)</span>
+              <span class="dbe-pct" style="color:var(--green)">8.4% <span style="font-size:0.7rem;color:var(--text-3);font-weight:500;">/ 7% goal</span></span>
+            </div>
+            <div class="dbe-track">
+              <div class="dbe-fill" style="width:100%;background:var(--green)"></div>
+            </div>
+            <div class="dbe-note"><span>Exceeding target by 1.4%</span><span style="color:var(--green);font-weight:700;">✓ Met</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Funding Sources -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🏦 Funding Sources — FY2026</div>
+          <a class="card-action" onclick="showPage('grants', document.getElementById('nav-grants'))">Details →</a>
+        </div>
+        <div style="padding:0.85rem 0 0.25rem;">
+          <div class="fund-row"><div class="fund-label">Federal (FHWA/EPA)</div><div class="fund-track"><div class="fund-fill" style="width:85%;background:var(--navy)"></div></div><div class="fund-amount" style="color:var(--navy)">$142M</div></div>
+          <div class="fund-row"><div class="fund-label">State (MDOT/MEDC)</div><div class="fund-track"><div class="fund-fill" style="width:48%;background:var(--blue)"></div></div><div class="fund-amount" style="color:var(--blue)">$62M</div></div>
+          <div class="fund-row"><div class="fund-label">HUD / CDBG</div><div class="fund-track"><div class="fund-fill" style="width:28%;background:var(--purple)"></div></div><div class="fund-amount" style="color:var(--purple)">$34M</div></div>
+          <div class="fund-row"><div class="fund-label">General Fund</div><div class="fund-track"><div class="fund-fill" style="width:22%;background:var(--teal)"></div></div><div class="fund-amount" style="color:var(--teal)">$28M</div></div>
+          <div class="fund-row"><div class="fund-label">Bond Proceeds</div><div class="fund-track"><div class="fund-fill" style="width:13%;background:var(--text-3)"></div></div><div class="fund-amount" style="color:var(--text-3)">$18M</div></div>
+        </div>
+      </div>
+
+      <!-- FOIA Quick View -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📂 Open FOIA Requests</div>
+          <a class="card-action" onclick="showPage('foia', document.getElementById('nav-foia'))">Manage →</a>
+        </div>
+        <div>
+          <div class="foia-item">
+            <div style="flex:1;">
+              <div style="font-size:0.85rem;font-weight:600;color:var(--text);">FOIA-2025-0411 — Water Main bid docs</div>
+              <div style="font-size:0.73rem;color:var(--text-3);">Detroit Free Press · Requested Oct 18</div>
+            </div>
+            <span class="pill pill-red">Due in 2 days</span>
+          </div>
+          <div class="foia-item" style="border-bottom:none;">
+            <div style="flex:1;">
+              <div style="font-size:0.85rem;font-weight:600;color:var(--text);">FOIA-2025-0398 — Vendor payment records</div>
+              <div style="font-size:0.73rem;color:var(--text-3);">City Council Member · Requested Oct 12</div>
+            </div>
+            <span class="pill pill-yellow">Due in 8 days</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== COMPLIANCE ALERTS ========== -->
+<div class="page" id="page-alerts">
+  <div class="page-hdr">
+    <div><div class="page-title">Compliance Alerts</div><div class="page-sub">4 issues requiring department action</div></div>
+    <div class="hdr-actions"><div class="btn btn-sm btn-navy">Mark All Reviewed</div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:1rem;">
+    <div class="card-header"><div class="card-title" style="color:var(--red)">🔴 Critical — Federal Compliance Risk</div></div>
+    <table class="data-table">
+      <thead><tr><th>Issue</th><th>Project</th><th>Regulation</th><th>Deadline</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><div class="td-bold">DBE participation below 25% federal minimum</div><div style="font-size:0.75rem;color:var(--text-3);">Currently 14.2% — risk of FHWA funding freeze if not corrected this quarter</div></td>
+          <td><span class="pill pill-navy">Water Main</span></td>
+          <td style="font-size:0.78rem;">49 CFR Part 26</td>
+          <td class="td-red">End of Quarter</td>
+          <td><div class="btn btn-sm btn-navy">Create Corrective Plan</div></td>
+        </tr>
+        <tr>
+          <td><div class="td-bold">Certified payroll not submitted — Week 14</div><div style="font-size:0.75rem;color:var(--text-3);">Roncelli Inc. — 11 days overdue · Davis-Bacon violation potential</div></td>
+          <td><span class="pill pill-blue">Gratiot Ave</span></td>
+          <td style="font-size:0.78rem;">Davis-Bacon Act</td>
+          <td class="td-red">Today</td>
+          <td><div class="btn btn-sm btn-navy">Notify Contractor</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-bottom:1rem;">
+    <div class="card-header"><div class="card-title" style="color:var(--yellow)">⚠️ Warnings — Resolve This Week</div></div>
+    <table class="data-table">
+      <thead><tr><th>Issue</th><th>Project</th><th>Regulation</th><th>Deadline</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><div class="td-bold">Insurance certificate expires in 14 days</div><div style="font-size:0.75rem;color:var(--text-3);">Great Lakes Mechanical COI — must be renewed before next invoice</div></td>
+          <td><span class="pill pill-teal">E. Market</span></td>
+          <td style="font-size:0.78rem;">Contract §8.2</td>
+          <td class="td-yellow">Nov 7</td>
+          <td><div class="btn btn-sm">Request Renewal</div></td>
+        </tr>
+        <tr>
+          <td><div class="td-bold">FOIA-2025-0411 due in 2 days</div><div style="font-size:0.75rem;color:var(--text-3);">Detroit Free Press — Water Main bid documents · All records are in the system</div></td>
+          <td><span class="pill pill-navy">Water Main</span></td>
+          <td style="font-size:0.78rem;">Michigan FOIA Act</td>
+          <td class="td-yellow">Oct 26</td>
+          <td><div class="btn btn-sm btn-navy">Prepare Response</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========== BID SOLICITATIONS ========== -->
+<div class="page" id="page-bids">
+  <div class="page-hdr">
+    <div><div class="page-title">Active Bid Solicitations</div><div class="page-sub">All bids posted to SAM.gov and Michigan Buys automatically</div></div>
+    <div class="hdr-actions">
+      <div class="btn">📥 Export Bid Log</div>
+      <div class="btn btn-navy">+ New Solicitation</div>
+    </div>
+  </div>
+
+  <div class="ai-box" style="margin:0 0 1.25rem;">
+    <div class="ai-tag">AI</div>
+    <div class="ai-txt"><strong>Mack Ave Water Service</strong> has 3 bids in — lowest is $4.1M from Motor City Contractors, within your estimate range. <strong>DBE check:</strong> only 1 of 3 bidders has DBE certification on file. AI recommends requesting DBE participation plans before award. <strong>Fairgrounds Rehab</strong> closes in 3 days with only 2 bids — consider outreach to increase competition.</div>
+  </div>
+
+  <div class="filter-row">
+    <div class="filter-chip active" onclick="toggleFilter(this)">All (6)</div>
+    <div class="filter-chip" onclick="toggleFilter(this)">Open (4)</div>
+    <div class="filter-chip" onclick="toggleFilter(this)">Evaluation (1)</div>
+    <div class="filter-chip" onclick="toggleFilter(this)">Closing Soon (2)</div>
+  </div>
+
+  <div class="card">
+    <div>
+      <div class="bid-card">
+        <div class="bid-header">
+          <div class="bid-title">Mack Ave Water Service Upgrade — Phase 1</div>
+          <div class="bid-value">Est. $4–6M</div>
+        </div>
+        <div class="bid-meta"><span>IFB-2025-0088</span><span>DWSD</span><span>Closes: Nov 3, 2025</span><span>3 bids received</span></div>
+        <div class="bid-tags">
+          <span class="pill pill-navy">Federal-Aid</span>
+          <span class="pill pill-green">DBE 25% Required</span>
+          <span class="pill pill-yellow">Eval. In Progress</span>
+        </div>
+      </div>
+
+      <div class="bid-card">
+        <div class="bid-header">
+          <div class="bid-title">Belle Isle Bridge Deck Rehabilitation</div>
+          <div class="bid-value">Est. $12–15M</div>
+        </div>
+        <div class="bid-meta"><span>IFB-2025-0091</span><span>BSEED / MDOT</span><span>Closes: Nov 14, 2025</span><span>4 plan holders</span></div>
+        <div class="bid-tags">
+          <span class="pill pill-navy">FHWA</span>
+          <span class="pill pill-green">DBE 30% Required</span>
+          <span class="pill pill-blue">Open</span>
+          <span class="pill pill-purple">Pre-Bid Nov 1</span>
+        </div>
+      </div>
+
+      <div class="bid-card">
+        <div class="bid-header">
+          <div class="bid-title">State Fairgrounds Athletic Facility Rehab</div>
+          <div class="bid-value">Est. $3.2M</div>
+        </div>
+        <div class="bid-meta"><span>RFP-2025-0072</span><span>Detroit Parks & Rec</span><span>Closes: Oct 27, 2025</span><span>2 bids — low competition</span></div>
+        <div class="bid-tags">
+          <span class="pill pill-teal">CDBG Funded</span>
+          <span class="pill pill-green">MBE 20% Required</span>
+          <span class="pill pill-red">Closing in 3 Days</span>
+        </div>
+      </div>
+
+      <div class="bid-card">
+        <div class="bid-header">
+          <div class="bid-title">Citywide LED Streetlight Replacement — Zones 3 & 4</div>
+          <div class="bid-value">Est. $8M</div>
+        </div>
+        <div class="bid-meta"><span>IFB-2025-0094</span><span>Detroit Public Lighting</span><span>Closes: Nov 20, 2025</span><span>12 plan holders</span></div>
+        <div class="bid-tags">
+          <span class="pill pill-purple">DOE Grant</span>
+          <span class="pill pill-green">DBE 20% Required</span>
+          <span class="pill pill-blue">Open</span>
+        </div>
+      </div>
+
+      <div class="bid-card">
+        <div class="bid-header">
+          <div class="bid-title">Southwest Detroit Stormwater Infrastructure</div>
+          <div class="bid-value">Est. $22M</div>
+        </div>
+        <div class="bid-meta"><span>RFQ-2025-0081</span><span>GLWA / DWSD</span><span>SOQ Due: Dec 5, 2025</span><span>Pre-qual underway</span></div>
+        <div class="bid-tags">
+          <span class="pill pill-navy">EPA Grant</span>
+          <span class="pill pill-green">DBE 30% Required</span>
+          <span class="pill pill-teal">Design-Build</span>
+          <span class="pill pill-blue">Open</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== CONTRACT AWARDS ========== -->
+<div class="page" id="page-awards">
+  <div class="page-hdr">
+    <div><div class="page-title">Contract Awards</div><div class="page-sub">Pending and recent awards — council approval tracking</div></div>
+    <div class="hdr-actions"><div class="btn btn-navy">📋 Prepare Award Memo</div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:1rem;">
+    <div class="card-header"><div class="card-title" style="color:var(--yellow)">⏳ Pending Council Approval</div></div>
+    <table class="data-table">
+      <thead><tr><th>Project</th><th>Recommended Vendor</th><th>Bid Amount</th><th>DBE %</th><th>Council Date</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="td-bold">Mack Ave Water Service Upgrade</td>
+          <td>Motor City Contractors</td>
+          <td class="td-navy">$4,120,000</td>
+          <td class="td-green">26.4%</td>
+          <td>Nov 5 Council</td>
+          <td><span class="pill pill-yellow">Pending Vote</span></td>
+        </tr>
+        <tr>
+          <td class="td-bold">Fitzgerald Neighborhood Streetwork</td>
+          <td>Detroit Road Builders</td>
+          <td class="td-navy">$2,840,000</td>
+          <td class="td-green">31.2%</td>
+          <td>Nov 5 Council</td>
+          <td><span class="pill pill-yellow">Pending Vote</span></td>
+        </tr>
+        <tr>
+          <td class="td-bold">Rivertown Park Improvements</td>
+          <td>Green Space LLC</td>
+          <td class="td-navy">$1,200,000</td>
+          <td class="td-yellow">18.2%</td>
+          <td>Nov 19 Council</td>
+          <td><span class="pill pill-orange">DBE Waiver Needed</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title" style="color:var(--green)">✓ Recent Awards — Executed</div></div>
+    <table class="data-table">
+      <thead><tr><th>Project</th><th>Contractor</th><th>Contract Amount</th><th>DBE %</th><th>Award Date</th></tr></thead>
+      <tbody>
+        <tr><td class="td-bold">Gratiot Ave Resurfacing Ph.2</td><td>Roncelli Inc.</td><td class="td-navy">$17,800,000</td><td class="td-yellow">22.1%</td><td>Aug 28, 2025</td></tr>
+        <tr><td class="td-bold">Eastern Market Renovation</td><td>Barton Malow</td><td class="td-navy">$11,400,000</td><td class="td-green">28.4%</td><td>Jul 15, 2025</td></tr>
+        <tr><td class="td-bold">Jefferson Ave Streetscape</td><td>Sachse Construction</td><td class="td-navy">$8,900,000</td><td class="td-green">31.2%</td><td>Jun 3, 2025</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========== DBE TRACKING ========== -->
+<div class="page" id="page-dbe">
+  <div class="page-hdr">
+    <div><div class="page-title">DBE / MBE Tracking</div><div class="page-sub">Federal reporting · 49 CFR Part 26 compliance</div></div>
+    <div class="hdr-actions">
+      <div class="btn">📥 Export for MDOT</div>
+      <div class="btn btn-navy">📋 Generate Compliance Report</div>
+    </div>
+  </div>
+
+  <div class="alert-strip" style="margin-bottom:1.25rem;">
+    <div style="flex:1;">
+      <div class="alert-strip-title">🚨 Detroit Water Main project is at risk of federal funding suspension</div>
+      <div class="alert-strip-desc">DBE participation is 14.2% — FHWA minimum is 25%. A corrective action plan must be submitted to MDOT by end of quarter or draw disbursements may be paused.</div>
+    </div>
+    <div class="btn btn-sm btn-navy">Create Corrective Plan</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header"><div class="card-title">📊 DBE by Project</div></div>
+      <table class="data-table">
+        <thead><tr><th>Project</th><th>Goal</th><th>Actual</th><th>$ Paid to DBE</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td class="td-bold">Water Main Replacement</td><td>25%</td><td class="td-red">14.2%</td><td>$2.1M of $14.8M</td><td><span class="pill pill-red">Non-Compliant</span></td></tr>
+          <tr><td class="td-bold">Gratiot Ave Resurfacing</td><td>25%</td><td class="td-yellow">22.1%</td><td>$3.9M of $17.8M</td><td><span class="pill pill-yellow">Watch</span></td></tr>
+          <tr><td class="td-bold">Eastern Market</td><td>20%</td><td class="td-green">28.4%</td><td>$3.2M of $11.4M</td><td><span class="pill pill-green">✓ Compliant</span></td></tr>
+          <tr><td class="td-bold">Jefferson Ave</td><td>25%</td><td class="td-green">31.2%</td><td>$2.8M of $8.9M</td><td><span class="pill pill-green">✓ Compliant</span></td></tr>
+          <tr><td class="td-bold">Fitzgerald Infra.</td><td>30%</td><td class="td-green">34.8%</td><td>$0.78M of $2.2M</td><td><span class="pill pill-green">✓ Compliant</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-title">🏢 Top DBE/MBE Firms — This Fiscal Year</div></div>
+      <table class="data-table">
+        <thead><tr><th>Firm</th><th>Certification</th><th>Projects</th><th>Total Paid</th></tr></thead>
+        <tbody>
+          <tr><td class="td-bold">Detroit Concrete Works</td><td><span class="pill pill-green">DBE · MBE</span></td><td>3</td><td class="td-green">$1.84M</td></tr>
+          <tr><td class="td-bold">Motor City Plumbing Inc.</td><td><span class="pill pill-purple">DBE · WBE</span></td><td>2</td><td class="td-green">$1.22M</td></tr>
+          <tr><td class="td-bold">Great Lakes Women in Trade</td><td><span class="pill pill-blue">WBE</span></td><td>4</td><td class="td-green">$980K</td></tr>
+          <tr><td class="td-bold">Midwest Minority Electric</td><td><span class="pill pill-green">DBE · MBE</span></td><td>2</td><td class="td-green">$742K</td></tr>
+          <tr><td class="td-bold">Rivertown Paving LLC</td><td><span class="pill pill-green">DBE</span></td><td>1</td><td class="td-green">$318K</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PREVAILING WAGE ========== -->
+<div class="page" id="page-prevwage">
+  <div class="page-hdr">
+    <div><div class="page-title">Prevailing Wage</div><div class="page-sub">Davis-Bacon Act · Certified payroll tracking</div></div>
+    <div class="hdr-actions"><div class="btn btn-navy">📋 Export Payroll Report</div></div>
+  </div>
+
+  <div class="alert-strip" style="margin-bottom:1.25rem;">
+    <div style="flex:1;">
+      <div class="alert-strip-title">⚠️ Roncelli Inc. certified payroll overdue — Week 14</div>
+      <div class="alert-strip-desc">11 days late · Gratiot Ave Resurfacing · Davis-Bacon requires weekly submission · 2nd violation this project</div>
+    </div>
+    <div style="display:flex;gap:0.6rem;">
+      <div class="btn btn-sm">Send Formal Notice</div>
+      <div class="btn btn-sm btn-navy">Document Violation</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title">👔 Certified Payroll Submission Status</div></div>
+    <table class="data-table">
+      <thead><tr><th>Contractor</th><th>Project</th><th>Last Submitted</th><th>Week Due</th><th>Days Late</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td class="td-bold">Roncelli Inc.</td><td>Gratiot Ave Resurfacing</td><td>Oct 3</td><td>Week 14</td><td class="td-red">11 days</td><td><span class="pill pill-red">🚨 Violation</span></td></tr>
+        <tr><td class="td-bold">Barton Malow</td><td>Eastern Market</td><td>Oct 21</td><td>Week 15</td><td class="td-green">0 days</td><td><span class="pill pill-green">✓ Current</span></td></tr>
+        <tr><td class="td-bold">Sachse Construction</td><td>Jefferson Ave</td><td>Oct 20</td><td>Week 15</td><td class="td-green">1 day</td><td><span class="pill pill-green">✓ Current</span></td></tr>
+        <tr><td class="td-bold">Detroit Road Builders</td><td>Fitzgerald Infra.</td><td>Oct 19</td><td>Week 15</td><td class="td-green">2 days</td><td><span class="pill pill-green">✓ Current</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========== VENDORS ========== -->
+<div class="page" id="page-vendors">
+  <div class="page-hdr">
+    <div><div class="page-title">Approved Vendor Registry</div><div class="page-sub">Pre-qualified contractors · Certifications on file</div></div>
+    <div class="hdr-actions"><div class="btn btn-navy">+ Add Vendor</div></div>
+  </div>
+
+  <div class="ai-box" style="margin:0 0 1.25rem;">
+    <div class="ai-tag">AI</div>
+    <div class="ai-txt"><strong>3 vendor certifications expire within 30 days.</strong> Roncelli Inc. bond expires Nov 1 — they have an active contract. Motor City Contractors insurance expires Oct 31. <strong>Action needed before next payment release.</strong></div>
+  </div>
+
+  <div class="card">
+    <table class="data-table">
+      <thead><tr><th>Vendor</th><th>Trade</th><th>Certifications</th><th>DBE/MBE</th><th>Bond</th><th>Insurance</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td class="td-bold">Barton Malow Company</td><td>General Contractor</td><td><span class="pill pill-green">SAM.gov ✓</span></td><td><span class="pill pill-gray">None</span></td><td><span class="pill pill-green">✓ Valid</span></td><td><span class="pill pill-green">✓ Valid</span></td><td><span class="pill pill-green">● Active</span></td></tr>
+        <tr><td class="td-bold">Roncelli Inc.</td><td>Civil / GC</td><td><span class="pill pill-green">SAM.gov ✓</span></td><td><span class="pill pill-gray">None</span></td><td><span class="pill pill-red">⚠ Exp. Nov 1</span></td><td><span class="pill pill-green">✓ Valid</span></td><td><span class="pill pill-yellow">Renew Bond</span></td></tr>
+        <tr><td class="td-bold">Motor City Contractors</td><td>Utility / Civil</td><td><span class="pill pill-green">SAM.gov ✓</span></td><td><span class="pill pill-green">DBE ✓</span></td><td><span class="pill pill-green">✓ Valid</span></td><td><span class="pill pill-red">⚠ Exp. Oct 31</span></td><td><span class="pill pill-red">Urgent</span></td></tr>
+        <tr><td class="td-bold">Detroit Concrete Works</td><td>Concrete / Masonry</td><td><span class="pill pill-green">SAM.gov ✓</span></td><td><span class="pill pill-green">DBE · MBE ✓</span></td><td><span class="pill pill-green">✓ Valid</span></td><td><span class="pill pill-green">✓ Valid</span></td><td><span class="pill pill-green">● Active</span></td></tr>
+        <tr><td class="td-bold">Sachse Construction</td><td>General Contractor</td><td><span class="pill pill-green">SAM.gov ✓</span></td><td><span class="pill pill-gray">None</span></td><td><span class="pill pill-green">✓ Valid</span></td><td><span class="pill pill-green">✓ Valid</span></td><td><span class="pill pill-green">● Active</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========== AUDIT TRAIL ========== -->
+<div class="page" id="page-audit">
+  <div class="page-hdr">
+    <div><div class="page-title">Audit Trail</div><div class="page-sub">Immutable blockchain-verified activity log · FOIA-ready</div></div>
+    <div class="hdr-actions">
+      <div class="btn">🔍 Search Logs</div>
+      <div class="btn btn-navy">📥 Export for Auditor</div>
+    </div>
+  </div>
+
+  <div class="ai-box" style="margin:0 0 1.25rem;">
+    <div class="ai-tag">AI</div>
+    <div class="ai-txt">Every payment, approval, document upload, and status change is <strong>permanently recorded on blockchain</strong> with a tamper-proof hash. This log is automatically formatted for FOIA requests, Inspector General audits, and federal compliance reviews. <strong>Zero paperwork needed.</strong></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title">🔒 Verified Activity Log</div><div style="font-size:0.8rem;color:var(--green);font-weight:600;">● Blockchain Verified</div></div>
+    <div>
+      <div class="audit-row">
+        <div class="audit-time-col"><div class="audit-time">Oct 24 · 09:04 AM</div><div class="audit-user">System / AI</div></div>
+        <div><div class="audit-action"><strong>DBE compliance alert generated</strong> — Water Main project fell below 25% federal DBE threshold. Score: 14.2%. Flagged for department review.</div><div class="audit-hash">tx: 0x7f3a...c92b</div></div>
+      </div>
+      <div class="audit-row">
+        <div class="audit-time-col"><div class="audit-time">Oct 23 · 2:15 PM</div><div class="audit-user">J. Williams · DPW</div></div>
+        <div><div class="audit-action"><strong>$2,400,000 payment approved and released</strong> — Eastern Market Renovation · Milestone 4 · Barton Malow · All lien waivers confirmed.</div><div class="audit-hash">tx: 0x8c11...aa7d</div></div>
+      </div>
+      <div class="audit-row">
+        <div class="audit-time-col"><div class="audit-time">Oct 22 · 11:30 AM</div><div class="audit-user">R. Thompson · Procurement</div></div>
+        <div><div class="audit-action"><strong>Bid solicitation IFB-2025-0088 published</strong> — Mack Ave Water Service Upgrade · Posted to SAM.gov, Michigan Buys, and Detroit Purchasing Portal simultaneously.</div><div class="audit-hash">tx: 0x4d28...f03e</div></div>
+      </div>
+      <div class="audit-row">
+        <div class="audit-time-col"><div class="audit-time">Oct 21 · 3:45 PM</div><div class="audit-user">City Council</div></div>
+        <div><div class="audit-action"><strong>Council Resolution #2025-1142 recorded</strong> — Jefferson Ave Streetscape Phase 3 approved · $9,000,000 authorized · 15-0 vote.</div><div class="audit-hash">tx: 0x1b94...e55f</div></div>
+      </div>
+      <div class="audit-row">
+        <div class="audit-time-col"><div class="audit-time">Oct 20 · 9:00 AM</div><div class="audit-user">System / AI</div></div>
+        <div><div class="audit-action"><strong>Certified payroll violation flagged</strong> — Roncelli Inc. week 14 submission not received for Gratiot Ave project. Automated notice sent to contractor.</div><div class="audit-hash">tx: 0x5e77...b20c</div></div>
+      </div>
+      <div class="audit-row">
+        <div class="audit-time-col"><div class="audit-time">Oct 18 · 1:22 PM</div><div class="audit-user">M. Johnson · DPW</div></div>
+        <div><div class="audit-action"><strong>FOIA-2025-0411 received</strong> — Detroit Free Press request for Water Main bid documents. 15-day response clock started. Documents auto-compiled from vault.</div><div class="audit-hash">tx: 0x9a02...d41b</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== FOIA ========== -->
+<div class="page" id="page-foia">
+  <div class="page-hdr">
+    <div><div class="page-title">FOIA Requests</div><div class="page-sub">Michigan FOIA Act · 15-business-day response requirement</div></div>
+    <div class="hdr-actions"><div class="btn btn-navy">+ Log New Request</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title">📂 Open Requests</div></div>
+    <table class="data-table">
+      <thead><tr><th>Request #</th><th>Requestor</th><th>Documents Requested</th><th>Received</th><th>Due</th><th>Days Left</th><th>Status</th><th>Action</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="td-mono td-bold">FOIA-2025-0411</td>
+          <td>Detroit Free Press</td>
+          <td>Water Main bid docs, scoring sheets, DBE plans</td>
+          <td>Oct 18</td>
+          <td class="td-red">Oct 26</td>
+          <td class="td-red">2 days</td>
+          <td><span class="pill pill-red">⚠ Urgent</span></td>
+          <td><div class="btn btn-sm btn-navy">Prepare Response</div></td>
+        </tr>
+        <tr>
+          <td class="td-mono td-bold">FOIA-2025-0398</td>
+          <td>Council Member Smith</td>
+          <td>All vendor payment records Q3 FY2025</td>
+          <td>Oct 12</td>
+          <td class="td-yellow">Nov 1</td>
+          <td class="td-yellow">8 days</td>
+          <td><span class="pill pill-yellow">In Prep</span></td>
+          <td><div class="btn btn-sm">Continue</div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:1rem;">
+    <div class="card-header"><div class="card-title">✓ Closed Requests — Last 90 Days</div></div>
+    <table class="data-table">
+      <thead><tr><th>Request #</th><th>Requestor</th><th>Subject</th><th>Closed</th><th>Result</th></tr></thead>
+      <tbody>
+        <tr><td class="td-mono">FOIA-2025-0381</td><td>WDIV Channel 4</td><td>Eastern Market contractor selection process</td><td>Oct 9</td><td><span class="pill pill-green">Fulfilled</span></td></tr>
+        <tr><td class="td-mono">FOIA-2025-0362</td><td>Resident Advocacy Group</td><td>Fitzgerald project budget breakdown</td><td>Sep 28</td><td><span class="pill pill-green">Fulfilled</span></td></tr>
+        <tr><td class="td-mono">FOIA-2025-0341</td><td>Inspector General</td><td>All DBE payments FY2024-2025</td><td>Sep 15</td><td><span class="pill pill-green">Fulfilled</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========== GRANTS ========== -->
+<div class="page" id="page-grants">
+  <div class="page-hdr">
+    <div><div class="page-title">Grants & Funding Sources</div><div class="page-sub">Federal, state, and local funding tracking</div></div>
+    <div class="hdr-actions"><div class="btn btn-navy">+ Add Funding Source</div></div>
+  </div>
+  <div class="card">
+    <div>
+      <div class="grant-card">
+        <div class="grant-header">
+          <div class="grant-name">FHWA Surface Transportation Program — Gratiot Ave Resurfacing</div>
+          <div class="grant-amount">$14.4M</div>
+        </div>
+        <div class="grant-meta"><span>Federal Highway Administration</span><span>80% federal / 20% local match</span><span>Grant #MI-STP-2025-0044</span></div>
+        <div style="display:flex;gap:0.5rem;"><span class="pill pill-green">✓ Active</span><span class="pill pill-navy">Davis-Bacon Required</span><span class="pill pill-green">DBE 25%</span></div>
+      </div>
+      <div class="grant-card">
+        <div class="grant-header">
+          <div class="grant-name">HUD Community Development Block Grant — Fitzgerald Neighborhood</div>
+          <div class="grant-amount">$6.5M</div>
+        </div>
+        <div class="grant-meta"><span>U.S. Dept. of Housing and Urban Development</span><span>100% federal</span><span>Grant #B-25-MC-26-0006</span></div>
+        <div style="display:flex;gap:0.5rem;"><span class="pill pill-green">✓ Active</span><span class="pill pill-purple">Section 3 Required</span><span class="pill pill-green">MBE 20%</span></div>
+      </div>
+      <div class="grant-card">
+        <div class="grant-header">
+          <div class="grant-name">EPA Water Infrastructure Finance — Water Main Replacement</div>
+          <div class="grant-amount">$21M</div>
+        </div>
+        <div class="grant-meta"><span>Environmental Protection Agency / DWSD</span><span>WIFIA Loan + Grant Hybrid</span><span>Grant #EPA-WIFIA-MI-2025</span></div>
+        <div style="display:flex;gap:0.5rem;"><span class="pill pill-red">⚠ DBE Non-Compliant</span><span class="pill pill-navy">Davis-Bacon Required</span></div>
+      </div>
+      <div class="grant-card">
+        <div class="grant-header">
+          <div class="grant-name">DOE Energy Efficiency Block Grant — LED Streetlights</div>
+          <div class="grant-amount">$6.4M</div>
+        </div>
+        <div class="grant-meta"><span>Dept. of Energy · Inflation Reduction Act</span><span>100% federal</span><span>Grant #EECBG-2025-DET</span></div>
+        <div style="display:flex;gap:0.5rem;"><span class="pill pill-blue">Solicitation Open</span><span class="pill pill-green">DBE 20%</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== REPORTS ========== -->
+<div class="page" id="page-reports">
+  <div class="page-hdr">
+    <div><div class="page-title">Reports & Export</div><div class="page-sub">Auto-formatted for federal agencies, council, and public record</div></div>
+  </div>
+  <div class="grid-3">
+    <div class="card" style="cursor:pointer;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="padding:1.5rem;text-align:center;">
+        <div style="font-size:2.5rem;margin-bottom:0.75rem;">📊</div>
+        <div style="font-weight:800;font-size:0.92rem;margin-bottom:0.3rem;">CIP Quarterly Report</div>
+        <div style="font-size:0.77rem;color:var(--text-3);margin-bottom:1rem;">All projects · Spend · Schedule · DBE</div>
+        <div class="btn btn-sm btn-navy" style="width:100%;justify-content:center;">Generate PDF</div>
+      </div>
+    </div>
+    <div class="card" style="cursor:pointer;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="padding:1.5rem;text-align:center;">
+        <div style="font-size:2.5rem;margin-bottom:0.75rem;">📋</div>
+        <div style="font-weight:800;font-size:0.92rem;margin-bottom:0.3rem;">DBE / MBE Annual Report</div>
+        <div style="font-size:0.77rem;color:var(--text-3);margin-bottom:1rem;">MDOT format · 49 CFR Part 26</div>
+        <div class="btn btn-sm btn-primary" style="width:100%;justify-content:center;">Export for MDOT</div>
+      </div>
+    </div>
+    <div class="card" style="cursor:pointer;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="padding:1.5rem;text-align:center;">
+        <div style="font-size:2.5rem;margin-bottom:0.75rem;">🏛️</div>
+        <div style="font-weight:800;font-size:0.92rem;margin-bottom:0.3rem;">Council Budget Report</div>
+        <div style="font-size:0.77rem;color:var(--text-3);margin-bottom:1rem;">Spend vs budget · Project status</div>
+        <div class="btn btn-sm btn-navy" style="width:100%;justify-content:center;">Export for Council</div>
+      </div>
+    </div>
+    <div class="card" style="cursor:pointer;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="padding:1.5rem;text-align:center;">
+        <div style="font-size:2.5rem;margin-bottom:0.75rem;">🔍</div>
+        <div style="font-weight:800;font-size:0.92rem;margin-bottom:0.3rem;">Inspector General Package</div>
+        <div style="font-size:0.77rem;color:var(--text-3);margin-bottom:1rem;">Full audit trail · Blockchain verified</div>
+        <div class="btn btn-sm" style="width:100%;justify-content:center;">Export for IG</div>
+      </div>
+    </div>
+    <div class="card" style="cursor:pointer;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="padding:1.5rem;text-align:center;">
+        <div style="font-size:2.5rem;margin-bottom:0.75rem;">📂</div>
+        <div style="font-weight:800;font-size:0.92rem;margin-bottom:0.3rem;">FOIA Response Package</div>
+        <div style="font-size:0.77rem;color:var(--text-3);margin-bottom:1rem;">Auto-compiled public records</div>
+        <div class="btn btn-sm" style="width:100%;justify-content:center;">Compile Records</div>
+      </div>
+    </div>
+    <div class="card" style="cursor:pointer;transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+      <div style="padding:1.5rem;text-align:center;">
+        <div style="font-size:2.5rem;margin-bottom:0.75rem;">🏦</div>
+        <div style="font-weight:800;font-size:0.92rem;margin-bottom:0.3rem;">Grant Drawdown Reports</div>
+        <div style="font-size:0.77rem;color:var(--text-3);margin-bottom:1rem;">Federal format by funding source</div>
+        <div class="btn btn-sm" style="width:100%;justify-content:center;">Generate by Grant</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PERMITS ========== -->
+<div class="page" id="page-permits">
+  <div class="page-hdr">
+    <div><div class="page-title">Permits & Inspections</div><div class="page-sub">All permits tracked · Inspection scheduling</div></div>
+  </div>
+  <div class="card">
+    <table class="data-table">
+      <thead><tr><th>Project</th><th>Permit #</th><th>Type</th><th>Issued</th><th>Expires</th><th>Inspections</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td class="td-bold">Water Main Replacement</td><td class="td-mono">DWSD-2025-0441</td><td>Utility Excavation</td><td>Aug 10</td><td class="td-green">Mar 2026</td><td><span class="pill pill-green">3 Passed</span></td><td><span class="pill pill-green">✓ Active</span></td></tr>
+        <tr><td class="td-bold">Gratiot Ave Resurfacing</td><td class="td-mono">MDOT-2025-R182</td><td>ROW / Paving</td><td>Jul 28</td><td class="td-yellow">Dec 2025</td><td><span class="pill pill-yellow">1 Upcoming</span></td><td><span class="pill pill-green">✓ Active</span></td></tr>
+        <tr><td class="td-bold">Eastern Market Renovation</td><td class="td-mono">DET-B-2025-4411</td><td>Building / Historic</td><td>Jun 15</td><td class="td-green">Jun 2026</td><td><span class="pill pill-green">5 Passed</span></td><td><span class="pill pill-green">✓ Active</span></td></tr>
+        <tr><td class="td-bold">Jefferson Ave Streetscape</td><td class="td-mono">DET-ROW-2025-0218</td><td>ROW / Landscaping</td><td>May 3</td><td class="td-green">May 2026</td><td><span class="pill pill-green">2 Passed</span></td><td><span class="pill pill-green">✓ Active</span></td></tr>
+        <tr><td class="td-bold">Fitzgerald Infra.</td><td class="td-mono">DET-B-2025-5102</td><td>Building / Site</td><td>Oct 5</td><td class="td-green">Oct 2026</td><td><span class="pill pill-teal">First Insp. Due</span></td><td><span class="pill pill-teal">New</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========== BUDGET ========== -->
+<div class="page" id="page-budget">
+  <div class="page-hdr">
+    <div><div class="page-title">Budget Tracking</div><div class="page-sub">FY2026 Capital Improvement Budget · $284M total</div></div>
+    <div class="hdr-actions"><div class="btn btn-navy">📥 Export for Finance</div></div>
+  </div>
+  <div class="kpi-row" style="grid-template-columns:repeat(4,1fr);">
+    <div class="kpi-card navy"><div class="kpi-top"><span class="kpi-icon">🏛️</span><span class="kpi-trend info">FY2026</span></div><div class="kpi-val">$284M</div><div class="kpi-lbl">Total Appropriated</div></div>
+    <div class="kpi-card green"><div class="kpi-top"><span class="kpi-icon">📝</span><span class="kpi-trend good">62%</span></div><div class="kpi-val">$176M</div><div class="kpi-lbl">Encumbered</div></div>
+    <div class="kpi-card yellow"><div class="kpi-top"><span class="kpi-icon">💸</span><span class="kpi-trend warn">Expended</span></div><div class="kpi-val">$94M</div><div class="kpi-lbl">Actually Spent</div></div>
+    <div class="kpi-card purple"><div class="kpi-top"><span class="kpi-icon">💵</span><span class="kpi-trend info">Available</span></div><div class="kpi-val">$108M</div><div class="kpi-lbl">Unencumbered Balance</div></div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title">Budget by Department / Category</div></div>
+    <table class="data-table">
+      <thead><tr><th>Category</th><th>Appropriated</th><th>Encumbered</th><th>Expended</th><th>% Used</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td class="td-bold">Water & Sewer Infrastructure</td><td>$98M</td><td>$84M</td><td>$41M</td><td><div style="display:flex;align-items:center;gap:0.5rem;"><div class="mini-bar"><div class="mini-fill" style="width:86%;background:var(--navy)"></div></div><span style="font-size:0.75rem;color:var(--text-3);">86%</span></div></td><td><span class="pill pill-yellow">Watch</span></td></tr>
+        <tr><td class="td-bold">Roads & Transportation</td><td>$72M</td><td>$58M</td><td>$29M</td><td><div style="display:flex;align-items:center;gap:0.5rem;"><div class="mini-bar"><div class="mini-fill" style="width:81%;background:var(--blue)"></div></div><span style="font-size:0.75rem;color:var(--text-3);">81%</span></div></td><td><span class="pill pill-green">✓ On Track</span></td></tr>
+        <tr><td class="td-bold">Parks & Recreation</td><td>$34M</td><td>$18M</td><td>$12M</td><td><div style="display:flex;align-items:center;gap:0.5rem;"><div class="mini-bar"><div class="mini-fill" style="width:53%;background:var(--green)"></div></div><span style="font-size:0.75rem;color:var(--text-3);">53%</span></div></td><td><span class="pill pill-green">✓ On Track</span></td></tr>
+        <tr><td class="td-bold">Neighborhood Development</td><td>$48M</td><td>$14M</td><td>$8M</td><td><div style="display:flex;align-items:center;gap:0.5rem;"><div class="mini-bar"><div class="mini-fill" style="width:29%;background:var(--purple)"></div></div><span style="font-size:0.75rem;color:var(--text-3);">29%</span></div></td><td><span class="pill pill-teal">Early Stage</span></td></tr>
+        <tr><td class="td-bold">Technology & Sustainability</td><td>$32M</td><td>$2M</td><td>$4M</td><td><div style="display:flex;align-items:center;gap:0.5rem;"><div class="mini-bar"><div class="mini-fill" style="width:6%;background:var(--teal)"></div></div><span style="font-size:0.75rem;color:var(--text-3);">6%</span></div></td><td><span class="pill pill-blue">Bidding</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========== ALL PROJECTS ========== -->
+<div class="page" id="page-projects">
+  <div class="page-hdr">
+    <div><div class="page-title">All Capital Projects</div><div class="page-sub">14 active · FY2026 CIP</div></div>
+    <div class="hdr-actions"><div class="btn">📥 Export</div><div class="btn btn-navy">+ New Project</div></div>
+  </div>
+  <div class="filter-row">
+    <div class="filter-chip active" onclick="toggleFilter(this)">All (14)</div>
+    <div class="filter-chip" onclick="toggleFilter(this)">On Track (9)</div>
+    <div class="filter-chip" onclick="toggleFilter(this)">Issues (3)</div>
+    <div class="filter-chip" onclick="toggleFilter(this)">Bidding (2)</div>
+  </div>
+  <div class="card">
+    <table class="data-table">
+      <thead><tr><th>Project Name</th><th>Dept.</th><th>Budget</th><th>Progress</th><th>DBE %</th><th>Funding Source</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td class="td-bold">Water Main Replacement — Gratiot</td><td>DWSD</td><td class="td-navy">$42M</td><td><div style="display:flex;align-items:center;gap:0.5rem;"><div class="mini-bar"><div class="mini-fill" style="width:38%;background:var(--red)"></div></div>38%</div></td><td class="td-red">14.2% ⚠</td><td><span class="pill pill-navy">EPA / Federal</span></td><td><span class="pill pill-red">DBE Issue</span></td></tr>
+        <tr><td class="td-bold">Gratiot Ave Resurfacing Ph.2</td><td>DPW</td><td class="td-navy">$18M</td><td><div style="display:flex;align-items:center;gap:0.5rem;"><div class="mini-bar"><div class="mini-fill" style="width:62%;background:var(--yellow)"></div></div>62%</div></td><td class="td-yellow">22.1%</td><td><span class="pill pill-navy">FHWA</span></td><td><span class="pill pill-orange">Payroll Late</span></td></tr>
+        <tr><td class="td-bold">Eastern Market Renovation</td><td>DEGC</td><td class="td-navy">$12M</td><td><div style="display:flex;align-items:center;gap:0.5rem;"><div class="mini-bar"><div class="mini-fill" style="width:71%;background:var(--green)"></div></div>71%</div></td><td class="td-green">28.4%</td><td><span class="pill pill-purple">Gen. Fund</span></td><td><span class="pill pill-green">✓ Compliant</span></td></tr>
+        <tr><td class="td-bold">Jefferson Ave Streetscape</td><td>DPW</td><td class="td-navy">$9M</td><td><div style="display:flex;align-items:center;gap:0.5rem;"><div class="mini-bar"><div class="mini-fill" style="width:44%;background:var(--green)"></div></div>44%</div></td><td class="td-green">31.2%</td><td><span class="pill pill-blue">TIGER Grant</span></td><td><span class="pill pill-green">✓ Compliant</span></td></tr>
+        <tr><td class="td-bold">Fitzgerald Neighborhood Infra.</td><td>DLBA</td><td class="td-navy">$6.5M</td><td><div style="display:flex;align-items:center;gap:0.5rem;"><div class="mini-bar"><div class="mini-fill" style="width:19%;background:var(--teal)"></div></div>19%</div></td><td class="td-green">34.8%</td><td><span class="pill pill-purple">HUD CDBG</span></td><td><span class="pill pill-teal">On Track</span></td></tr>
+        <tr><td class="td-bold">Belle Isle Bridge Rehab</td><td>DPW</td><td class="td-navy">$14M</td><td><div style="display:flex;align-items:center;gap:0.5rem;"><div class="mini-bar"><div class="mini-fill" style="width:5%;background:var(--blue)"></div></div>5%</div></td><td class="td-gray">Pending</td><td><span class="pill pill-navy">FHWA / State</span></td><td><span class="pill pill-blue">Bidding</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</main>
+</div>
+
+<script>
+function showPage(id, navEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(n => n.classList.remove('active'));
+  const page = document.getElementById('page-' + id);
+  if (page) page.classList.add('active');
+  if (navEl) { navEl.classList.add('active'); }
+  else { const nav = document.getElementById('nav-' + id); if (nav) nav.classList.add('active'); }
+}
+
+function switchMainTab(el) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function toggleFilter(el) {
+  el.closest('.filter-row').querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+window.addEventListener('load', () => {
+  document.querySelectorAll('.pbar-fill, .mini-fill, .dbe-fill, .fund-fill').forEach(el => {
+    const w = el.style.width;
+    el.style.width = '0';
+    setTimeout(() => { el.style.width = w; }, 200);
+  });
+});
+</script>
+</body>
+</html>

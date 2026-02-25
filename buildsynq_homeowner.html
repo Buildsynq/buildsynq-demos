@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BuildSynq — Your Home Project</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple: #6366F1;
+  --purple-dark: #4F46E5;
+  --purple-light: #EEF2FF;
+  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-warm: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --green: #10B981;
+  --green-light: #ECFDF5;
+  --yellow: #F59E0B;
+  --yellow-light: #FFFBEB;
+  --red: #EF4444;
+  --red-light: #FEF2F2;
+  --blue: #3B82F6;
+  --blue-light: #EFF6FF;
+  --text: #1E293B;
+  --text-2: #475569;
+  --text-3: #94A3B8;
+  --border: #E2E8F0;
+  --bg: #F8FAFC;
+  --white: #FFFFFF;
+  --shadow: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-hover: 0 8px 28px rgba(99,102,241,0.12);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ---- TOP NAV ---- */
+.topnav {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px; position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.nav-left { display: flex; align-items: center; gap: 2rem; }
+.logo { font-size: 1.5rem; font-weight: 900; color: var(--purple); letter-spacing: -0.02em; text-decoration: none; }
+
+.nav-tabs { display: flex; }
+.nav-tab {
+  padding: 0.45rem 1rem; border-radius: 8px;
+  font-size: 0.87rem; font-weight: 600; color: var(--text-3);
+  cursor: pointer; transition: all 0.15s; border: none; background: none;
+}
+.nav-tab:hover { color: var(--text-2); background: var(--bg); }
+.nav-tab.active { color: var(--purple); background: var(--purple-light); }
+
+.nav-right { display: flex; align-items: center; gap: 0.85rem; }
+
+.notif-btn {
+  width: 38px; height: 38px; border-radius: 10px;
+  border: 1px solid var(--border); background: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 1rem; position: relative; transition: all 0.15s;
+}
+.notif-btn:hover { background: var(--bg); }
+.notif-dot { position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; background: var(--purple); border-radius: 50%; border: 2px solid white; }
+
+.user-pill {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.4rem 0.85rem 0.4rem 0.4rem;
+  border-radius: 40px; border: 1px solid var(--border); cursor: pointer; transition: all 0.15s;
+}
+.user-pill:hover { border-color: var(--purple); }
+.avatar { width: 30px; height: 30px; background: var(--gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; color: white; }
+.user-name { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+
+/* ---- LAYOUT ---- */
+.layout { display: grid; grid-template-columns: 230px 1fr; min-height: calc(100vh - 64px); }
+
+/* ---- SIDEBAR ---- */
+.sidebar {
+  background: var(--white); border-right: 1px solid var(--border);
+  padding: 1.5rem 1rem; display: flex; flex-direction: column; gap: 2px;
+  position: sticky; top: 64px; height: calc(100vh - 64px); overflow-y: auto;
+}
+
+.sidebar-section { font-size: 0.67rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); padding: 0.85rem 0.75rem 0.35rem; }
+
+.sb-item {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.65rem 0.85rem; border-radius: 10px;
+  cursor: pointer; transition: all 0.15s;
+  font-size: 0.87rem; font-weight: 500; color: var(--text-2);
+}
+.sb-item:hover { background: var(--purple-light); color: var(--purple); }
+.sb-item.active { background: var(--purple-light); color: var(--purple); font-weight: 700; }
+.sb-icon { font-size: 1rem; width: 20px; text-align: center; }
+
+.sb-badge { margin-left: auto; font-size: 0.65rem; font-weight: 700; padding: 0.12rem 0.45rem; border-radius: 20px; }
+.sb-badge.purple { background: var(--purple-light); color: var(--purple); }
+.sb-badge.green { background: var(--green-light); color: var(--green); }
+.sb-badge.yellow { background: var(--yellow-light); color: #92400E; }
+
+.sb-divider { height: 1px; background: var(--border); margin: 0.6rem 0; }
+
+.project-box {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 12px; padding: 1rem; margin-bottom: 1rem;
+}
+.project-box-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); margin-bottom: 0.35rem; }
+.project-box-name { font-size: 0.9rem; font-weight: 800; color: var(--text); margin-bottom: 0.15rem; }
+.project-box-meta { font-size: 0.75rem; color: var(--text-3); margin-bottom: 0.6rem; }
+.project-box-progress { }
+.project-box-bar { height: 6px; background: var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 0.3rem; }
+.project-box-fill { height: 100%; border-radius: 10px; background: var(--gradient); width: 50%; }
+.project-box-pct { font-size: 0.72rem; font-weight: 700; color: var(--purple); }
+
+/* ---- MAIN ---- */
+.main { padding: 2rem; }
+
+/* ---- PAGES ---- */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ---- PAGE HEADER ---- */
+.page-hdr { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.75rem; }
+.page-title { font-size: 1.5rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
+.page-sub { font-size: 0.87rem; color: var(--text-3); margin-top: 0.25rem; }
+
+/* ---- HERO CARD ---- */
+.hero-card {
+  background: var(--gradient);
+  border-radius: 20px; padding: 2.5rem;
+  color: white; margin-bottom: 1.75rem;
+  display: flex; align-items: center; justify-content: space-between;
+  position: relative; overflow: hidden;
+}
+.hero-card::before {
+  content: ''; position: absolute; right: -60px; top: -60px;
+  width: 280px; height: 280px; background: rgba(255,255,255,0.06); border-radius: 50%;
+}
+.hero-card::after {
+  content: ''; position: absolute; right: 120px; bottom: -80px;
+  width: 200px; height: 200px; background: rgba(255,255,255,0.04); border-radius: 50%;
+}
+
+.hero-left { position: relative; z-index: 1; }
+.hero-greeting { font-size: 0.85rem; font-weight: 600; opacity: 0.8; margin-bottom: 0.4rem; letter-spacing: 0.02em; }
+.hero-headline { font-size: 1.9rem; font-weight: 900; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 0.6rem; }
+.hero-sub { font-size: 0.9rem; opacity: 0.85; max-width: 420px; line-height: 1.6; }
+.hero-badges { display: flex; gap: 0.6rem; margin-top: 1.1rem; flex-wrap: wrap; }
+.hero-badge {
+  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+  color: white; padding: 0.35rem 0.85rem; border-radius: 20px;
+  font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 0.35rem;
+}
+
+.hero-right { position: relative; z-index: 1; text-align: center; }
+.hero-circle {
+  width: 140px; height: 140px;
+  background: rgba(255,255,255,0.12);
+  border: 3px solid rgba(255,255,255,0.3);
+  border-radius: 50%; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; margin: 0 auto 0.75rem;
+}
+.hero-pct { font-size: 2.5rem; font-weight: 900; line-height: 1; }
+.hero-pct-label { font-size: 0.75rem; font-weight: 600; opacity: 0.8; margin-top: 0.15rem; }
+.hero-est { font-size: 0.82rem; opacity: 0.8; }
+.hero-est strong { opacity: 1; font-weight: 700; }
+
+/* ---- BUTTONS ---- */
+.btn {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.6rem 1.25rem; border-radius: 10px;
+  font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all 0.15s;
+  border: 1px solid var(--border); background: var(--white); color: var(--text-2);
+}
+.btn:hover { background: var(--bg); }
+.btn-primary { background: var(--purple); color: white; border-color: var(--purple); }
+.btn-primary:hover { background: var(--purple-dark); }
+.btn-green { background: var(--green); color: white; border-color: var(--green); }
+.btn-green:hover { background: #059669; }
+.btn-sm { padding: 0.38rem 0.85rem; font-size: 0.8rem; }
+.btn-lg { padding: 0.85rem 2rem; font-size: 1rem; font-weight: 700; border-radius: 12px; }
+
+/* ---- WHAT'S HAPPENING TODAY ---- */
+.today-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.75rem; }
+
+.today-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 16px; padding: 1.4rem; box-shadow: var(--shadow);
+  transition: all 0.2s; cursor: default;
+}
+.today-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+
+.today-icon-wrap {
+  width: 48px; height: 48px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; margin-bottom: 0.85rem;
+}
+.today-icon-wrap.green { background: var(--green-light); }
+.today-icon-wrap.yellow { background: var(--yellow-light); }
+.today-icon-wrap.blue { background: var(--blue-light); }
+.today-icon-wrap.purple { background: var(--purple-light); }
+.today-icon-wrap.red { background: var(--red-light); }
+
+.today-label { font-size: 0.75rem; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.3rem; }
+.today-value { font-size: 1.1rem; font-weight: 800; color: var(--text); margin-bottom: 0.3rem; line-height: 1.3; }
+.today-sub { font-size: 0.78rem; color: var(--text-3); line-height: 1.5; }
+
+/* ---- CARD ---- */
+.card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; }
+.card-header { display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border); }
+.card-title { font-size: 0.95rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 0.5rem; }
+.card-action { font-size: 0.82rem; color: var(--purple); font-weight: 600; cursor: pointer; }
+.card-action:hover { text-decoration: underline; }
+
+/* ---- PILLS ---- */
+.pill { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.22rem 0.65rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+.pill-green { background: var(--green-light); color: var(--green); }
+.pill-yellow { background: var(--yellow-light); color: #92400E; }
+.pill-red { background: var(--red-light); color: var(--red); }
+.pill-purple { background: var(--purple-light); color: var(--purple); }
+.pill-gray { background: var(--bg); color: var(--text-3); border: 1px solid var(--border); }
+.pill-blue { background: var(--blue-light); color: var(--blue); }
+
+/* ---- LAYOUTS ---- */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem; }
+.grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem; }
+.col { display: flex; flex-direction: column; gap: 1.25rem; }
+
+/* ---- MILESTONE STEPS ---- */
+.milestone-steps { padding: 0.5rem 0; }
+.ms-step {
+  display: flex; gap: 1rem; padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(0,0,0,0.04); cursor: pointer; transition: background 0.1s;
+}
+.ms-step:hover { background: var(--bg); }
+.ms-step:last-child { border-bottom: none; }
+
+.ms-step-left { display: flex; flex-direction: column; align-items: center; gap: 0; }
+.ms-dot {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem; flex-shrink: 0; font-weight: 700;
+}
+.ms-line { width: 2px; flex: 1; min-height: 20px; margin: 3px 0; }
+
+.ms-dot.done { background: var(--green); color: white; }
+.ms-dot.active { background: var(--purple); color: white; box-shadow: 0 0 0 4px var(--purple-light); }
+.ms-dot.upcoming { background: var(--bg); border: 2px solid var(--border); color: var(--text-3); font-size: 0.75rem; }
+.ms-line.done { background: var(--green); }
+.ms-line.upcoming { background: var(--border); }
+
+.ms-content { flex: 1; padding-top: 4px; }
+.ms-name { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 0.2rem; }
+.ms-name.dim { color: var(--text-3); font-weight: 500; }
+.ms-meta { font-size: 0.78rem; color: var(--text-3); margin-bottom: 0.35rem; }
+.ms-detail { font-size: 0.78rem; color: var(--text-2); }
+
+.ms-right { text-align: right; padding-top: 4px; }
+.ms-amount { font-size: 0.95rem; font-weight: 800; color: var(--text); margin-bottom: 0.25rem; }
+.ms-amount.paid { color: var(--green); }
+.ms-amount.dim { color: var(--text-3); }
+
+/* ---- PHOTO SECTION ---- */
+.photo-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.6rem; padding: 1rem 1.5rem; }
+.photo-cell {
+  aspect-ratio: 1; border-radius: 10px; overflow: hidden;
+  cursor: pointer; transition: all 0.2s; position: relative;
+}
+.photo-cell:hover { transform: scale(1.02); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+.photo-cell .emoji-photo {
+  width: 100%; height: 100%; min-height: 90px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem; border-radius: 10px;
+}
+.photo-verified { position: absolute; bottom: 5px; right: 5px; background: var(--green); color: white; font-size: 0.6rem; font-weight: 700; padding: 0.12rem 0.35rem; border-radius: 4px; }
+.photo-new { position: absolute; bottom: 5px; left: 5px; background: var(--purple); color: white; font-size: 0.6rem; font-weight: 700; padding: 0.12rem 0.35rem; border-radius: 4px; }
+.photo-add { background: var(--bg); border: 2px dashed var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.3rem; color: var(--text-3); min-height: 90px; border-radius: 10px; }
+.photo-add:hover { border-color: var(--purple); color: var(--purple); background: var(--purple-light); }
+.photo-add-icon { font-size: 1.3rem; }
+.photo-add-label { font-size: 0.65rem; font-weight: 600; }
+
+/* ---- ACTIVITY ---- */
+.act-item { display: flex; gap: 0.85rem; padding: 0.9rem 1.5rem; border-bottom: 1px solid rgba(0,0,0,0.04); align-items: flex-start; }
+.act-item:last-child { border-bottom: none; }
+.act-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 6px; flex-shrink: 0; }
+.act-body { flex: 1; }
+.act-text { font-size: 0.85rem; color: var(--text-2); line-height: 1.5; }
+.act-text strong { color: var(--text); font-weight: 600; }
+.act-time { font-size: 0.72rem; color: var(--text-3); margin-top: 0.15rem; }
+
+/* ---- TRANSACTION LIST ---- */
+.tx-item {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1rem 1.5rem; border-bottom: 1px solid rgba(0,0,0,0.04);
+  cursor: pointer; transition: background 0.1s;
+}
+.tx-item:hover { background: var(--bg); }
+.tx-item:last-child { border-bottom: none; }
+
+.tx-icon {
+  width: 40px; height: 40px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;
+}
+.tx-icon.out { background: var(--red-light); }
+.tx-icon.in { background: var(--green-light); }
+.tx-icon.pending { background: var(--yellow-light); }
+
+.tx-content { flex: 1; }
+.tx-title { font-size: 0.88rem; font-weight: 600; color: var(--text); margin-bottom: 0.15rem; }
+.tx-meta { font-size: 0.75rem; color: var(--text-3); }
+
+.tx-right { text-align: right; }
+.tx-amount { font-size: 0.95rem; font-weight: 800; }
+.tx-amount.out { color: var(--red); }
+.tx-amount.in { color: var(--green); }
+.tx-amount.pending { color: var(--yellow); }
+.tx-status { font-size: 0.72rem; color: var(--text-3); margin-top: 0.1rem; }
+
+/* ---- BUDGET VISUAL ---- */
+.budget-visual { padding: 1.5rem; }
+.bv-total { font-size: 2rem; font-weight: 900; color: var(--text); letter-spacing: -0.03em; margin-bottom: 0.25rem; }
+.bv-sub { font-size: 0.82rem; color: var(--text-3); margin-bottom: 1.25rem; }
+.bv-bar { height: 14px; background: var(--border); border-radius: 10px; overflow: hidden; display: flex; margin-bottom: 1rem; }
+.bv-seg { height: 100%; transition: width 0.6s ease; }
+.bv-legend { display: flex; flex-direction: column; gap: 0.6rem; }
+.bv-leg-item { display: flex; align-items: center; justify-content: space-between; }
+.bv-leg-left { display: flex; align-items: center; gap: 0.6rem; font-size: 0.83rem; color: var(--text-2); font-weight: 500; }
+.bv-leg-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.bv-leg-right { font-size: 0.85rem; font-weight: 700; color: var(--text); }
+
+/* ---- WHATSAPP ---- */
+.whatsapp-btn {
+  background: #25D366; border-radius: 14px;
+  padding: 1rem 1.5rem; display: flex; align-items: center; gap: 1rem;
+  cursor: pointer; transition: all 0.15s; width: 100%;
+}
+.whatsapp-btn:hover { background: #22c55e; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(37,211,102,0.3); }
+.wa-icon { font-size: 1.5rem; flex-shrink: 0; }
+.wa-text { color: white; }
+.wa-title { font-size: 0.92rem; font-weight: 700; margin-bottom: 0.15rem; }
+.wa-sub { font-size: 0.75rem; opacity: 0.85; }
+
+/* ---- MESSAGE THREAD ---- */
+.msg-wrap { padding: 1rem 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; max-height: 320px; overflow-y: auto; }
+.msg-wrap::-webkit-scrollbar { width: 3px; }
+.msg-wrap::-webkit-scrollbar-thumb { background: var(--border); }
+
+.msg-bubble { max-width: 80%; }
+.msg-bubble.contractor { align-self: flex-start; }
+.msg-bubble.homeowner { align-self: flex-end; }
+
+.msg-sender { font-size: 0.68rem; font-weight: 700; color: var(--text-3); margin-bottom: 0.3rem; }
+.msg-bubble.homeowner .msg-sender { text-align: right; }
+
+.msg-text {
+  padding: 0.75rem 1rem; border-radius: 14px; font-size: 0.85rem; line-height: 1.5;
+}
+.msg-bubble.contractor .msg-text { background: var(--bg); border: 1px solid var(--border); color: var(--text-2); border-radius: 4px 14px 14px 14px; }
+.msg-bubble.homeowner .msg-text { background: var(--purple); color: white; border-radius: 14px 4px 14px 14px; }
+
+.msg-time { font-size: 0.68rem; color: var(--text-3); margin-top: 0.25rem; }
+.msg-bubble.homeowner .msg-time { text-align: right; }
+
+.msg-input-wrap {
+  padding: 0.85rem 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex; gap: 0.6rem; align-items: center;
+}
+.msg-input {
+  flex: 1; border: 1px solid var(--border); border-radius: 10px;
+  padding: 0.6rem 0.9rem; font-family: 'Inter', sans-serif;
+  font-size: 0.87rem; color: var(--text); outline: none; transition: border-color 0.2s;
+}
+.msg-input:focus { border-color: var(--purple); }
+.msg-input::placeholder { color: var(--text-3); }
+.msg-send { width: 38px; height: 38px; background: var(--purple); border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; font-size: 0.9rem; flex-shrink: 0; }
+.msg-send:hover { background: var(--purple-dark); }
+
+/* ---- DOCUMENT ROW ---- */
+.doc-item { display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1.5rem; border-bottom: 1px solid rgba(0,0,0,0.04); cursor: pointer; transition: background 0.1s; }
+.doc-item:hover { background: var(--bg); }
+.doc-item:last-child { border-bottom: none; }
+.doc-icon { font-size: 1.3rem; width: 36px; text-align: center; }
+.doc-content { flex: 1; }
+.doc-title { font-size: 0.87rem; font-weight: 600; color: var(--text); margin-bottom: 0.15rem; }
+.doc-meta { font-size: 0.75rem; color: var(--text-3); }
+
+/* ---- QUESTION CARD ---- */
+.q-card {
+  background: var(--purple-light); border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem;
+  display: flex; align-items: flex-start; gap: 1rem;
+}
+.q-card-icon { font-size: 1.5rem; flex-shrink: 0; }
+.q-card-title { font-size: 0.92rem; font-weight: 700; color: var(--text); margin-bottom: 0.25rem; }
+.q-card-sub { font-size: 0.82rem; color: var(--text-2); line-height: 1.6; }
+
+/* ---- APPROVAL CARD ---- */
+.approval-card {
+  background: var(--yellow-light); border: 2px solid var(--yellow);
+  border-radius: 16px; padding: 1.5rem; margin-bottom: 1.25rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+}
+.approval-left { flex: 1; }
+.approval-title { font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.5rem; }
+.approval-sub { font-size: 0.84rem; color: var(--text-2); line-height: 1.6; }
+
+/* ---- TABLE ---- */
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th { text-align: left; font-size: 0.73rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-3); padding: 0.7rem 1.5rem; background: var(--bg); border-bottom: 1px solid var(--border); }
+.data-table td { padding: 0.9rem 1.5rem; font-size: 0.86rem; color: var(--text-2); border-bottom: 1px solid rgba(0,0,0,0.04); vertical-align: middle; }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: rgba(99,102,241,0.02); }
+.td-bold { color: var(--text) !important; font-weight: 600 !important; }
+
+/* ---- SIMPLE CHECKLIST ---- */
+.checklist { padding: 0.5rem 0; }
+.check-row { display: flex; align-items: center; gap: 0.85rem; padding: 0.85rem 1.5rem; border-bottom: 1px solid rgba(0,0,0,0.04); }
+.check-row:last-child { border-bottom: none; }
+.check-box { width: 22px; height: 22px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0; }
+.check-box.done { background: var(--green); color: white; }
+.check-box.pending { background: var(--bg); border: 2px solid var(--border); }
+.check-box.warn { background: var(--yellow-light); border: 2px solid var(--yellow); }
+.check-text { flex: 1; font-size: 0.87rem; color: var(--text-2); font-weight: 500; }
+.check-text.done { text-decoration: line-through; color: var(--text-3); }
+.check-note { font-size: 0.73rem; color: var(--text-3); }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="nav-left">
+    <a href="#" class="logo">BuildSynq</a>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="switchTab(this)">My Project</button>
+      <button class="nav-tab" onclick="switchTab(this)">Payments</button>
+      <button class="nav-tab" onclick="switchTab(this)">Photos</button>
+      <button class="nav-tab" onclick="switchTab(this)">Documents</button>
+      <button class="nav-tab" onclick="switchTab(this)">Messages</button>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="notif-btn">🔔<div class="notif-dot"></div></div>
+    <div class="user-pill">
+      <div class="avatar">ST</div>
+      <span class="user-name">Sarah & Tom Chen</span>
+    </div>
+  </div>
+</nav>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="project-box">
+    <div class="project-box-label">Your Project</div>
+    <div class="project-box-name">Kitchen & Bath Remodel</div>
+    <div class="project-box-meta">1842 Maple Lane, Grosse Pointe, MI</div>
+    <div class="project-box-progress">
+      <div class="project-box-bar"><div class="project-box-fill"></div></div>
+      <div class="project-box-pct">50% Complete</div>
+    </div>
+  </div>
+
+  <div class="sb-item active" id="nav-home" onclick="showPage('home', this)"><span class="sb-icon">🏠</span> Project Home</div>
+  <div class="sb-item" id="nav-progress" onclick="showPage('progress', this)"><span class="sb-icon">📋</span> What's Getting Done</div>
+  <div class="sb-item" id="nav-today" onclick="showPage('today', this)"><span class="sb-icon">📅</span> Today on Site</div>
+
+  <div class="sb-divider"></div>
+
+  <div class="sb-item" id="nav-money" onclick="showPage('money', this)"><span class="sb-icon">💰</span> My Money <span class="sb-badge purple">Review</span></div>
+  <div class="sb-item" id="nav-photos" onclick="showPage('photos', this)"><span class="sb-icon">📸</span> Site Photos <span class="sb-badge green">12 new</span></div>
+  <div class="sb-item" id="nav-messages" onclick="showPage('messages', this)"><span class="sb-icon">💬</span> Messages <span class="sb-badge purple">3</span></div>
+  <div class="sb-item" id="nav-documents" onclick="showPage('documents', this)"><span class="sb-icon">📁</span> Documents</div>
+
+  <div class="sb-divider"></div>
+
+  <div class="sb-item" id="nav-approve" onclick="showPage('approve', this)"><span class="sb-icon">✅</span> Need My Approval <span class="sb-badge yellow">1</span></div>
+  <div class="sb-item" id="nav-questions" onclick="showPage('questions', this)"><span class="sb-icon">❓</span> Ask a Question</div>
+  <div class="sb-item"><span class="sb-icon">⚙️</span> Settings</div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+<!-- ========== HOME ========== -->
+<div class="page active" id="page-home">
+
+  <!-- HERO -->
+  <div class="hero-card">
+    <div class="hero-left">
+      <div class="hero-greeting">👋 Good morning, Sarah & Tom</div>
+      <div class="hero-headline">Your kitchen is coming<br>together beautifully.</div>
+      <div class="hero-sub">Mike's Construction was on site yesterday. Drywall is finished and electrical rough-in is complete. Here's everything you need to know today.</div>
+      <div class="hero-badges">
+        <div class="hero-badge">✅ Crew on site today</div>
+        <div class="hero-badge">📸 12 new photos</div>
+        <div class="hero-badge">💬 1 message from Mike</div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-circle">
+        <div class="hero-pct">50%</div>
+        <div class="hero-pct-label">Complete</div>
+      </div>
+      <div class="hero-est">Est. finish: <strong>Nov 14, 2025</strong></div>
+    </div>
+  </div>
+
+  <!-- APPROVAL NEEDED -->
+  <div class="approval-card">
+    <div class="approval-left">
+      <div class="approval-title">⏳ Mike needs your decision on something</div>
+      <div class="approval-sub">The HVAC reroute in the master bath will cost an extra <strong>$2,400</strong>. This came up during rough-in — it needs to be done before drywall goes up. Mike is waiting before he proceeds.</div>
+    </div>
+    <div style="display:flex;gap:0.6rem;flex-shrink:0;">
+      <div class="btn btn-sm btn-green">✓ Approve</div>
+      <div class="btn btn-sm" style="color:var(--red);" onclick="showPage('approve', document.getElementById('nav-approve'))">View Details</div>
+    </div>
+  </div>
+
+  <!-- WHAT'S HAPPENING TODAY -->
+  <div style="font-size:1rem;font-weight:800;color:var(--text);margin-bottom:0.85rem;letter-spacing:-0.01em;">What's happening today 🔨</div>
+  <div class="today-grid" style="margin-bottom:1.75rem;">
+    <div class="today-card">
+      <div class="today-icon-wrap green">👷</div>
+      <div class="today-label">Crew Status</div>
+      <div class="today-value">On Site Now</div>
+      <div class="today-sub">Mike + 3 crew · Arrived 7:45 AM · Insulation day</div>
+    </div>
+    <div class="today-card">
+      <div class="today-icon-wrap purple">📸</div>
+      <div class="today-label">New Photos</div>
+      <div class="today-value">12 Added</div>
+      <div class="today-sub">AI-verified, GPS-tagged from your job site · Tap to view</div>
+    </div>
+    <div class="today-card">
+      <div class="today-icon-wrap yellow">📅</div>
+      <div class="today-label">Next Milestone</div>
+      <div class="today-value">Insulation Done</div>
+      <div class="today-sub">Est. Oct 27 · Unlocks $12,400 payment when verified</div>
+    </div>
+  </div>
+
+  <!-- TWO COLUMNS -->
+  <div class="grid-2-1">
+    <div class="col">
+
+      <!-- Progress Steps -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📋 Project Milestones</div>
+          <a class="card-action" onclick="showPage('progress', document.getElementById('nav-progress'))">Full Timeline →</a>
+        </div>
+        <div class="milestone-steps">
+          <div class="ms-step">
+            <div class="ms-step-left">
+              <div class="ms-dot done">✓</div>
+              <div class="ms-line done"></div>
+            </div>
+            <div class="ms-content">
+              <div class="ms-name">1 — Project Start & Demo</div>
+              <div class="ms-meta">Completed Oct 3 · Verified by AI photos</div>
+            </div>
+            <div class="ms-right">
+              <div class="ms-amount paid">$28,400</div>
+              <span class="pill pill-green">Paid</span>
+            </div>
+          </div>
+
+          <div class="ms-step">
+            <div class="ms-step-left">
+              <div class="ms-dot done">✓</div>
+              <div class="ms-line done"></div>
+            </div>
+            <div class="ms-content">
+              <div class="ms-name">2 — Rough Framing</div>
+              <div class="ms-meta">Completed Oct 18 · Verified by AI photos</div>
+            </div>
+            <div class="ms-right">
+              <div class="ms-amount paid">$35,000</div>
+              <span class="pill pill-green">Paid</span>
+            </div>
+          </div>
+
+          <div class="ms-step">
+            <div class="ms-step-left">
+              <div class="ms-dot done">✓</div>
+              <div class="ms-line upcoming"></div>
+            </div>
+            <div class="ms-content">
+              <div class="ms-name">3 — Drywall & Electrical Rough-In</div>
+              <div class="ms-meta">Completed Oct 23 · City inspection passed ✓</div>
+            </div>
+            <div class="ms-right">
+              <div class="ms-amount paid">$47,500</div>
+              <span class="pill pill-green">Paid</span>
+            </div>
+          </div>
+
+          <div class="ms-step" style="background:rgba(99,102,241,0.03);">
+            <div class="ms-step-left">
+              <div class="ms-dot active">4</div>
+              <div class="ms-line upcoming"></div>
+            </div>
+            <div class="ms-content">
+              <div class="ms-name" style="color:var(--purple)">4 — Insulation & Drywall Finish</div>
+              <div class="ms-meta" style="color:var(--purple)">⏳ In progress now · Est. Oct 27</div>
+              <div class="ms-detail">When Mike uploads verified photos and AI confirms, this payment releases automatically.</div>
+            </div>
+            <div class="ms-right">
+              <div class="ms-amount">$12,400</div>
+              <span class="pill pill-purple">In Progress</span>
+            </div>
+          </div>
+
+          <div class="ms-step">
+            <div class="ms-step-left">
+              <div class="ms-dot upcoming">5</div>
+              <div class="ms-line upcoming"></div>
+            </div>
+            <div class="ms-content">
+              <div class="ms-name dim">5 — Cabinets & Tile</div>
+              <div class="ms-meta">Not started · Est. starts Nov 1</div>
+            </div>
+            <div class="ms-right">
+              <div class="ms-amount dim">$78,800</div>
+              <span class="pill pill-gray">Locked</span>
+            </div>
+          </div>
+
+          <div class="ms-step">
+            <div class="ms-step-left">
+              <div class="ms-dot upcoming">6</div>
+            </div>
+            <div class="ms-content">
+              <div class="ms-name dim">6 — Final Walkthrough & Punch List</div>
+              <div class="ms-meta">Not started · Your final sign-off</div>
+            </div>
+            <div class="ms-right">
+              <div class="ms-amount dim">$52,000</div>
+              <span class="pill pill-gray">Locked</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📡 Recent Updates</div>
+        </div>
+        <div>
+          <div class="act-item">
+            <div class="act-dot" style="background:var(--green)"></div>
+            <div class="act-body">
+              <div class="act-text"><strong>City inspection passed</strong> — Electrical rough-in cleared by inspector. No issues. Drywall can now proceed.</div>
+              <div class="act-time">Today, 9:30 AM</div>
+            </div>
+          </div>
+          <div class="act-item">
+            <div class="act-dot" style="background:var(--purple)"></div>
+            <div class="act-body">
+              <div class="act-text"><strong>12 new photos added</strong> by Mike's crew — drywall installation, electrical panel, plumbing rough-in</div>
+              <div class="act-time">Yesterday, 5:12 PM</div>
+            </div>
+          </div>
+          <div class="act-item">
+            <div class="act-dot" style="background:var(--yellow)"></div>
+            <div class="act-body">
+              <div class="act-text"><strong>Change order request</strong> from Mike — HVAC reroute in master bath · $2,400 · Waiting for your approval</div>
+              <div class="act-time">Yesterday, 2:41 PM</div>
+            </div>
+          </div>
+          <div class="act-item">
+            <div class="act-dot" style="background:var(--green)"></div>
+            <div class="act-body">
+              <div class="act-text"><strong>$47,500 released to Mike</strong> — Milestone 3 complete. Funds arrived in contractor's account via BuildSynq. Receipt saved.</div>
+              <div class="act-time">Oct 23, 2:15 PM</div>
+            </div>
+          </div>
+          <div class="act-item">
+            <div class="act-dot" style="background:var(--blue)"></div>
+            <div class="act-body">
+              <div class="act-text"><strong>Message from Mike</strong> — "Cabinets are ordered from Michigan Cabinet Co. 6-week lead time. We're good for Phase 5."</div>
+              <div class="act-time">Oct 22, 11:08 AM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COL -->
+    <div class="col">
+
+      <!-- Budget at a Glance -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">💰 Your Budget</div>
+          <a class="card-action" onclick="showPage('money', document.getElementById('nav-money'))">Details →</a>
+        </div>
+        <div class="budget-visual">
+          <div class="bv-total">$254,100</div>
+          <div class="bv-sub">Total project cost · Including approved change orders</div>
+          <div class="bv-bar">
+            <div class="bv-seg" style="width:44%;background:var(--green)"></div>
+            <div class="bv-seg" style="width:5%;background:var(--purple)"></div>
+            <div class="bv-seg" style="width:51%;background:var(--border)"></div>
+          </div>
+          <div class="bv-legend">
+            <div class="bv-leg-item">
+              <div class="bv-leg-left"><div class="bv-leg-dot" style="background:var(--green)"></div>Already paid to Mike</div>
+              <div class="bv-leg-right" style="color:var(--green)">$110,900</div>
+            </div>
+            <div class="bv-leg-item">
+              <div class="bv-leg-left"><div class="bv-leg-dot" style="background:var(--purple)"></div>In escrow (protected)</div>
+              <div class="bv-leg-right" style="color:var(--purple)">$12,400</div>
+            </div>
+            <div class="bv-leg-item">
+              <div class="bv-leg-left"><div class="bv-leg-dot" style="background:var(--border)"></div>Remaining milestones</div>
+              <div class="bv-leg-right">$130,800</div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:0 1.5rem 1.25rem;">
+          <div style="background:var(--green-light);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:0.85rem;font-size:0.82rem;color:var(--text-2);line-height:1.6;">
+            <strong style="color:var(--green);">🔒 Your money is protected.</strong> You only pay when each milestone is verified complete by AI photo review. Mike cannot request payment without proof of work.
+          </div>
+        </div>
+      </div>
+
+      <!-- Message Mike -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">💬 Messages</div>
+          <a class="card-action" onclick="showPage('messages', document.getElementById('nav-messages'))">See All →</a>
+        </div>
+        <div class="msg-wrap">
+          <div class="msg-bubble contractor">
+            <div class="msg-sender">Mike (Contractor)</div>
+            <div class="msg-text">Good morning! Crew is on site. Starting insulation today — should be done by end of day Thursday. I'll upload photos as we go.</div>
+            <div class="msg-time">Today, 7:52 AM</div>
+          </div>
+          <div class="msg-bubble homeowner">
+            <div class="msg-sender">You</div>
+            <div class="msg-text">Thanks Mike! Quick question — will the cabinet delivery affect the timeline at all?</div>
+            <div class="msg-time">Today, 8:15 AM</div>
+          </div>
+          <div class="msg-bubble contractor">
+            <div class="msg-sender">Mike (Contractor)</div>
+            <div class="msg-text">No, we'll finish insulation and drywall while we wait for cabinets. No delay. 👍</div>
+            <div class="msg-time">Today, 8:22 AM</div>
+          </div>
+        </div>
+        <div class="msg-input-wrap">
+          <input class="msg-input" type="text" placeholder="Message Mike..." />
+          <div class="msg-send">➤</div>
+        </div>
+      </div>
+
+      <!-- Message via WhatsApp -->
+      <div class="whatsapp-btn" onclick="showPage('messages', document.getElementById('nav-messages'))">
+        <span class="wa-icon">💬</span>
+        <div class="wa-text">
+          <div class="wa-title">Message Mike via WhatsApp</div>
+          <div class="wa-sub">Prefer to text? Open directly in WhatsApp</div>
+        </div>
+        <span style="color:rgba(255,255,255,0.7);font-size:1.1rem;">→</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PROGRESS ========== -->
+<div class="page" id="page-progress">
+  <div class="page-hdr">
+    <div><div class="page-title">What's Getting Done</div><div class="page-sub">Kitchen & Bath Remodel · Full timeline</div></div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-card-icon">💡</div>
+    <div>
+      <div class="q-card-title">How does this work?</div>
+      <div class="q-card-sub">Each milestone is a stage of your project with a specific payment tied to it. <strong>You don't pay until the work is done and verified.</strong> Mike uploads photos when each stage is complete — our AI checks they're genuine and match the work — then and only then does the payment release. You always stay in control.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="milestone-steps">
+      <div class="ms-step">
+        <div class="ms-step-left"><div class="ms-dot done">✓</div><div class="ms-line done"></div></div>
+        <div class="ms-content">
+          <div class="ms-name">1 — Project Start & Demo</div>
+          <div class="ms-meta">Done Oct 3 · 3 photos verified</div>
+          <div class="ms-detail">Old kitchen cabinets, counters, and flooring removed. Walls opened for plumbing and electrical access.</div>
+        </div>
+        <div class="ms-right"><div class="ms-amount paid">$28,400</div><span class="pill pill-green">✓ Paid Oct 3</span></div>
+      </div>
+      <div class="ms-step">
+        <div class="ms-step-left"><div class="ms-dot done">✓</div><div class="ms-line done"></div></div>
+        <div class="ms-content">
+          <div class="ms-name">2 — Rough Framing & Subfloor Repair</div>
+          <div class="ms-meta">Done Oct 18 · 6 photos verified · Rot discovered and repaired (+$1,800 CO)</div>
+          <div class="ms-detail">New wall framing, kitchen island structure built, subfloor replaced where rot was found.</div>
+        </div>
+        <div class="ms-right"><div class="ms-amount paid">$35,000</div><span class="pill pill-green">✓ Paid Oct 18</span></div>
+      </div>
+      <div class="ms-step">
+        <div class="ms-step-left"><div class="ms-dot done">✓</div><div class="ms-line upcoming"></div></div>
+        <div class="ms-content">
+          <div class="ms-name">3 — Drywall & MEP Rough-In</div>
+          <div class="ms-meta">Done Oct 23 · 8 photos verified · City inspection passed ✓</div>
+          <div class="ms-detail">Drywall hung. Electrical, plumbing, and HVAC rough-in complete. Inspector approved — no issues.</div>
+        </div>
+        <div class="ms-right"><div class="ms-amount paid">$47,500</div><span class="pill pill-green">✓ Paid Oct 23</span></div>
+      </div>
+      <div class="ms-step" style="background:rgba(99,102,241,0.03);">
+        <div class="ms-step-left"><div class="ms-dot active">4</div><div class="ms-line upcoming"></div></div>
+        <div class="ms-content">
+          <div class="ms-name" style="color:var(--purple)">4 — Insulation & Drywall Finish</div>
+          <div class="ms-meta" style="color:var(--purple)">Happening now · Est. complete Oct 27</div>
+          <div class="ms-detail">Insulation going in today. Drywall finishing (taping, mudding, sanding) follows. Mike will upload photos when done — payment releases automatically after AI verification.</div>
+        </div>
+        <div class="ms-right"><div class="ms-amount">$12,400</div><span class="pill pill-purple">In Progress</span></div>
+      </div>
+      <div class="ms-step">
+        <div class="ms-step-left"><div class="ms-dot upcoming">5</div><div class="ms-line upcoming"></div></div>
+        <div class="ms-content">
+          <div class="ms-name dim">5 — Cabinets, Tile & Fixtures</div>
+          <div class="ms-meta">Starts when cabinets arrive · ~6 weeks · Est. starts Nov 14</div>
+          <div class="ms-detail">Kitchen cabinets, bathroom vanity, all tile work, fixtures, and appliance rough-in.</div>
+        </div>
+        <div class="ms-right"><div class="ms-amount dim">$78,800</div><span class="pill pill-gray">🔒 Locked</span></div>
+      </div>
+      <div class="ms-step">
+        <div class="ms-step-left"><div class="ms-dot upcoming">6</div></div>
+        <div class="ms-content">
+          <div class="ms-name dim">6 — Final Walkthrough & Punch List</div>
+          <div class="ms-meta">You walk through with Mike and sign off on everything</div>
+          <div class="ms-detail">Final inspection, punch list items resolved, project complete. You hold this payment until you're 100% happy with the work.</div>
+        </div>
+        <div class="ms-right"><div class="ms-amount dim">$52,000</div><span class="pill pill-gray">🔒 Locked</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== TODAY ========== -->
+<div class="page" id="page-today">
+  <div class="page-hdr">
+    <div><div class="page-title">Today on Site</div><div class="page-sub">Tuesday, Oct 24 · Live job site status</div></div>
+  </div>
+
+  <div class="today-grid" style="grid-template-columns:1fr 1fr;">
+    <div class="today-card">
+      <div class="today-icon-wrap green">👷</div>
+      <div class="today-label">Crew Status</div>
+      <div class="today-value">Mike + 3 Crew On Site</div>
+      <div class="today-sub">Arrived 7:45 AM · Working on insulation installation</div>
+    </div>
+    <div class="today-card">
+      <div class="today-icon-wrap blue">🌤️</div>
+      <div class="today-label">Weather</div>
+      <div class="today-value">52°F · Partly Cloudy</div>
+      <div class="today-sub">No weather impact expected · Good working conditions</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:1.25rem;">
+    <div class="card-header"><div class="card-title">🔨 Today's Work Plan</div></div>
+    <div class="checklist">
+      <div class="check-row"><div class="check-box done">✓</div><div class="check-text done">Install insulation — kitchen walls (west and north)</div><div class="check-note">Done 9:30 AM</div></div>
+      <div class="check-row"><div class="check-box pending"></div><div class="check-text">Install insulation — kitchen walls (east and ceiling)</div><div class="check-note">In progress</div></div>
+      <div class="check-row"><div class="check-box pending"></div><div class="check-text">Install insulation — master bath walls</div><div class="check-note">Afternoon</div></div>
+      <div class="check-row"><div class="check-box warn">!</div><div class="check-text">HVAC reroute — master bath <span style="color:var(--yellow);font-size:0.75rem;font-weight:600;">(waiting for your approval)</span></div><div class="check-note">Pending</div></div>
+      <div class="check-row"><div class="check-box pending"></div><div class="check-text">Upload end-of-day photos for your review</div><div class="check-note">End of day</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title">📅 Coming Up This Week</div></div>
+    <table class="data-table">
+      <thead><tr><th>Day</th><th>What's Happening</th><th>Who</th></tr></thead>
+      <tbody>
+        <tr><td class="td-bold">Today · Tue Oct 24</td><td>Insulation installation</td><td>Mike + 3 crew</td></tr>
+        <tr><td class="td-bold">Wed Oct 25</td><td>Drywall finishing begins (taping & mud coat 1)</td><td>Mike + 2 crew</td></tr>
+        <tr><td class="td-bold">Thu Oct 26</td><td>Mud coat 2 — drying time</td><td>Mike (checking in)</td></tr>
+        <tr><td class="td-bold">Fri Oct 27</td><td>Sand & prime · Milestone 4 photos uploaded</td><td>Mike + crew</td></tr>
+        <tr><td class="td-bold">Mon Oct 30</td><td>Interior painting begins</td><td>Pete's Painting</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========== MONEY ========== -->
+<div class="page" id="page-money">
+  <div class="page-hdr">
+    <div><div class="page-title">My Money</div><div class="page-sub">Where every dollar of your project budget is</div></div>
+  </div>
+
+  <div class="q-card">
+    <div class="q-card-icon">🔒</div>
+    <div>
+      <div class="q-card-title">Your money is always protected</div>
+      <div class="q-card-sub">BuildSynq holds your payments in escrow until each milestone is verified complete. <strong>Mike cannot request payment without AI-verified photos showing the work is done.</strong> You also have final approval on every payment before it releases. No surprises.</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:1.25rem;">
+    <div class="budget-visual" style="padding:1.5rem;">
+      <div class="bv-total">$254,100</div>
+      <div class="bv-sub">Total contract · Including $5,200 in approved change orders</div>
+      <div class="bv-bar" style="height:18px;margin-bottom:1.25rem;">
+        <div class="bv-seg" style="width:44%;background:var(--green)"></div>
+        <div class="bv-seg" style="width:5%;background:var(--purple)"></div>
+        <div class="bv-seg" style="width:51%;background:var(--border)"></div>
+      </div>
+      <div class="bv-legend">
+        <div class="bv-leg-item"><div class="bv-leg-left"><div class="bv-leg-dot" style="background:var(--green)"></div>Paid to Mike (Milestones 1–3)</div><div class="bv-leg-right" style="color:var(--green)">$110,900</div></div>
+        <div class="bv-leg-item"><div class="bv-leg-left"><div class="bv-leg-dot" style="background:var(--purple)"></div>In escrow — Milestone 4 in progress</div><div class="bv-leg-right" style="color:var(--purple)">$12,400</div></div>
+        <div class="bv-leg-item"><div class="bv-leg-left"><div class="bv-leg-dot" style="background:var(--border)"></div>Remaining (Milestones 5 & 6)</div><div class="bv-leg-right">$130,800</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title">💳 Payment History</div></div>
+    <div>
+      <div class="tx-item">
+        <div class="tx-icon out">💸</div>
+        <div class="tx-content"><div class="tx-title">Milestone 3 — Drywall & MEP Rough-In</div><div class="tx-meta">Oct 23, 2025 · Verified by AI · 8 photos</div></div>
+        <div class="tx-right"><div class="tx-amount out">-$47,500</div><div class="tx-status">Paid to Mike's Construction</div></div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon out">💸</div>
+        <div class="tx-content"><div class="tx-title">Milestone 2 — Rough Framing + Change Order</div><div class="tx-meta">Oct 18, 2025 · Verified by AI · 6 photos</div></div>
+        <div class="tx-right"><div class="tx-amount out">-$36,800</div><div class="tx-status">Paid to Mike's Construction</div></div>
+      </div>
+      <div class="tx-item">
+        <div class="tx-icon out">💸</div>
+        <div class="tx-content"><div class="tx-title">Milestone 1 — Project Start & Demo</div><div class="tx-meta">Oct 3, 2025 · Verified by AI · 3 photos</div></div>
+        <div class="tx-right"><div class="tx-amount out">-$28,400</div><div class="tx-status">Paid to Mike's Construction</div></div>
+      </div>
+      <div class="tx-item" style="background:var(--purple-light);">
+        <div class="tx-icon pending">⏳</div>
+        <div class="tx-content"><div class="tx-title">Milestone 4 — Insulation & Drywall Finish</div><div class="tx-meta">In progress · Releases when Mike uploads verified photos</div></div>
+        <div class="tx-right"><div class="tx-amount pending">$12,400</div><div class="tx-status" style="color:var(--purple)">In Escrow — Protected</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PHOTOS ========== -->
+<div class="page" id="page-photos">
+  <div class="page-hdr">
+    <div><div class="page-title">Site Photos</div><div class="page-sub">GPS-tagged, AI-verified job site documentation</div></div>
+  </div>
+
+  <div class="q-card" style="background:var(--green-light);border-color:rgba(16,185,129,0.2);">
+    <div class="q-card-icon">🤖</div>
+    <div>
+      <div class="q-card-title" style="color:var(--green);">AI verifies every photo automatically</div>
+      <div class="q-card-sub">Every photo is checked for GPS location (must match your address), timestamp, and work completeness before it counts toward a milestone payment. You can always see exactly what's happening at your home.</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:1.25rem;">
+    <div class="card-header"><div class="card-title">📸 Today's Photos — Oct 24</div><span class="pill pill-purple">12 new</span></div>
+    <div class="photo-grid">
+      <div class="photo-cell"><div class="emoji-photo" style="background:linear-gradient(135deg,#cbd5e1,#94a3b8);">🏠</div><div class="photo-verified">✓ Verified</div></div>
+      <div class="photo-cell"><div class="emoji-photo" style="background:linear-gradient(135deg,#a3c4bc,#7fb3a5);">🧱</div><div class="photo-verified">✓ Verified</div><div class="photo-new">New</div></div>
+      <div class="photo-cell"><div class="emoji-photo" style="background:linear-gradient(135deg,#b8cce4,#8fafd4);">🔧</div><div class="photo-verified">✓ Verified</div><div class="photo-new">New</div></div>
+      <div class="photo-cell"><div class="emoji-photo" style="background:linear-gradient(135deg,#d4c5a9,#c4b08a);">🏗️</div><div class="photo-new">New</div></div>
+      <div class="photo-cell"><div class="emoji-photo" style="background:linear-gradient(135deg,#c5d4c5,#a5bca5);">⚡</div><div class="photo-verified">✓ Verified</div></div>
+      <div class="photo-cell"><div class="emoji-photo" style="background:linear-gradient(135deg,#d4a5c5,#b88aa5);">🚿</div><div class="photo-new">New</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title">📁 Photo Archive</div></div>
+    <table class="data-table">
+      <thead><tr><th>Date</th><th>Milestone</th><th>Photos</th><th>AI Status</th></tr></thead>
+      <tbody>
+        <tr><td class="td-bold">Today, Oct 24</td><td>Milestone 4 — Insulation</td><td>12 photos</td><td><span class="pill pill-green">✓ Verified</span></td></tr>
+        <tr><td class="td-bold">Oct 23</td><td>Milestone 3 — Drywall complete</td><td>8 photos</td><td><span class="pill pill-green">✓ Payment Released</span></td></tr>
+        <tr><td class="td-bold">Oct 18</td><td>Milestone 2 — Framing complete</td><td>6 photos</td><td><span class="pill pill-green">✓ Payment Released</span></td></tr>
+        <tr><td class="td-bold">Oct 3</td><td>Milestone 1 — Demo complete</td><td>3 photos</td><td><span class="pill pill-green">✓ Payment Released</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ========== MESSAGES ========== -->
+<div class="page" id="page-messages">
+  <div class="page-hdr">
+    <div><div class="page-title">Messages</div><div class="page-sub">All your conversations with Mike's Construction</div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:1rem;">
+    <div class="card-header"><div class="card-title">💬 Mike's Construction</div><span class="pill pill-green">● Online</span></div>
+    <div class="msg-wrap" style="max-height:450px;">
+      <div class="msg-bubble contractor"><div class="msg-sender">Mike (Contractor)</div><div class="msg-text">Good morning! Crew is on site. Starting insulation today — should be done by end of day Thursday. I'll upload photos as we go.</div><div class="msg-time">Today, 7:52 AM</div></div>
+      <div class="msg-bubble homeowner"><div class="msg-sender">You</div><div class="msg-text">Thanks Mike! Quick question — will the cabinet delivery affect the timeline at all?</div><div class="msg-time">Today, 8:15 AM</div></div>
+      <div class="msg-bubble contractor"><div class="msg-sender">Mike (Contractor)</div><div class="msg-text">No, we'll finish insulation and drywall while we wait for cabinets. No delay. 👍</div><div class="msg-time">Today, 8:22 AM</div></div>
+      <div class="msg-bubble contractor"><div class="msg-sender">Mike (Contractor)</div><div class="msg-text">Also heads up — I submitted a change order for the HVAC reroute. It's $2,400 and we need your approval before we can proceed. Everything else is on track!</div><div class="msg-time">Yesterday, 2:41 PM</div></div>
+      <div class="msg-bubble homeowner"><div class="msg-sender">You</div><div class="msg-text">Got it, we'll review the change order tonight. Thanks for the heads up!</div><div class="msg-time">Yesterday, 6:12 PM</div></div>
+      <div class="msg-bubble contractor"><div class="msg-sender">Mike (Contractor)</div><div class="msg-text">Cabinets are ordered from Michigan Cabinet Co. 6-week lead time. We're good for Phase 5.</div><div class="msg-time">Oct 22, 11:08 AM</div></div>
+    </div>
+    <div class="msg-input-wrap">
+      <input class="msg-input" type="text" placeholder="Message Mike..." />
+      <div class="msg-send">➤</div>
+    </div>
+  </div>
+
+  <div class="whatsapp-btn">
+    <span class="wa-icon">💬</span>
+    <div class="wa-text"><div class="wa-title">Open in WhatsApp</div><div class="wa-sub">Prefer text messages? Continue this conversation in WhatsApp.</div></div>
+    <span style="color:rgba(255,255,255,0.7);font-size:1.1rem;">→</span>
+  </div>
+</div>
+
+<!-- ========== DOCUMENTS ========== -->
+<div class="page" id="page-documents">
+  <div class="page-hdr">
+    <div><div class="page-title">My Documents</div><div class="page-sub">Everything about your project in one place</div></div>
+    <div><div class="btn btn-sm btn-primary">📥 Download All</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title">📄 Your Project Documents</div></div>
+    <div>
+      <div class="doc-item"><span class="doc-icon">📋</span><div class="doc-content"><div class="doc-title">Signed Contract — Mike's Construction</div><div class="doc-meta">Signed Oct 1, 2025 · $248,900 original scope</div></div><span class="pill pill-green">View</span></div>
+      <div class="doc-item"><span class="doc-icon">📝</span><div class="doc-content"><div class="doc-title">Change Order #1 — Subfloor Repair ($1,800)</div><div class="doc-meta">Approved Oct 9, 2025</div></div><span class="pill pill-green">View</span></div>
+      <div class="doc-item"><span class="doc-icon">📝</span><div class="doc-content"><div class="doc-title">Change Order #2 — HVAC Reroute ($2,400)</div><div class="doc-meta">Submitted Oct 23 · Awaiting your approval</div></div><span class="pill pill-yellow">Review</span></div>
+      <div class="doc-item"><span class="doc-icon">🏛️</span><div class="doc-content"><div class="doc-title">Building Permit — City of Grosse Pointe</div><div class="doc-meta">Permit #GP-2025-4892 · Active · Expires Jun 2026</div></div><span class="pill pill-green">View</span></div>
+      <div class="doc-item"><span class="doc-icon">✅</span><div class="doc-content"><div class="doc-title">Electrical Inspection — Passed</div><div class="doc-meta">Inspected Oct 24, 2025 · Inspector: R. Williams</div></div><span class="pill pill-green">View</span></div>
+      <div class="doc-item"><span class="doc-icon">💰</span><div class="doc-content"><div class="doc-title">Payment Receipt — Milestone 3 ($47,500)</div><div class="doc-meta">Oct 23, 2025 · Blockchain receipt #7f3a...c92b</div></div><span class="pill pill-green">Download</span></div>
+      <div class="doc-item"><span class="doc-icon">💰</span><div class="doc-content"><div class="doc-title">Payment Receipt — Milestone 2 ($36,800)</div><div class="doc-meta">Oct 18, 2025 · Blockchain receipt #8c11...aa7d</div></div><span class="pill pill-green">Download</span></div>
+      <div class="doc-item"><span class="doc-icon">💰</span><div class="doc-content"><div class="doc-title">Payment Receipt — Milestone 1 ($28,400)</div><div class="doc-meta">Oct 3, 2025 · Blockchain receipt #4d28...f03e</div></div><span class="pill pill-green">Download</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== APPROVE ========== -->
+<div class="page" id="page-approve">
+  <div class="page-hdr">
+    <div><div class="page-title">Needs Your Approval</div><div class="page-sub">1 item waiting for your decision</div></div>
+  </div>
+
+  <div class="card" style="max-width:680px;">
+    <div style="padding:2rem 2rem 0;">
+      <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);margin-bottom:0.35rem;">Change Order Request</div>
+      <div style="font-size:1.3rem;font-weight:800;color:var(--text);margin-bottom:0.5rem;">HVAC Reroute — Master Bath</div>
+      <div style="font-size:2rem;font-weight:900;color:var(--text);letter-spacing:-0.03em;margin-bottom:0.25rem;">+ $2,400</div>
+      <div style="font-size:0.82rem;color:var(--text-3);margin-bottom:1.5rem;">Requested by Mike's Construction · Oct 23, 2025</div>
+    </div>
+
+    <div style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:1.5rem 2rem;">
+      <div style="font-size:0.88rem;font-weight:700;color:var(--text);margin-bottom:0.6rem;">What is this for?</div>
+      <div style="font-size:0.85rem;color:var(--text-2);line-height:1.7;margin-bottom:1rem;">During the drywall rough-in, Mike discovered that the original HVAC duct routing in the master bath conflicts with the new vanity location you chose. The duct needs to be rerouted around the vanity wall to avoid blocking access. <strong>This is a required change</strong> — without it, the HVAC won't work properly and the vanity can't be installed.</div>
+      <div style="font-size:0.88rem;font-weight:700;color:var(--text);margin-bottom:0.5rem;">Breakdown of the $2,400</div>
+      <table class="data-table" style="margin:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+        <thead><tr><th>Item</th><th style="text-align:right;">Cost</th></tr></thead>
+        <tbody>
+          <tr><td>Labor — HVAC reroute (4 hrs)</td><td style="text-align:right;">$800</td></tr>
+          <tr><td>Additional ductwork & fittings</td><td style="text-align:right;">$1,200</td></tr>
+          <tr><td>Insulation patch</td><td style="text-align:right;">$400</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="padding:1.5rem 2rem;">
+      <div style="background:var(--yellow-light);border:1px solid rgba(245,158,11,0.25);border-radius:10px;padding:1rem;margin-bottom:1.5rem;font-size:0.82rem;color:var(--text-2);line-height:1.6;">
+        ⏳ <strong>Mike is waiting before proceeding.</strong> This work needs to be done before insulation goes in — if you can decide today, it won't delay the project.
+      </div>
+      <div style="display:flex;gap:0.85rem;">
+        <div class="btn btn-green btn-lg" style="flex:1;justify-content:center;">✓ Approve $2,400</div>
+        <div class="btn btn-lg" style="flex:1;justify-content:center;color:var(--red);">✗ Reject — Ask Questions</div>
+      </div>
+      <div style="text-align:center;margin-top:1rem;">
+        <span style="font-size:0.78rem;color:var(--text-3);">Have questions? </span>
+        <span style="font-size:0.78rem;color:var(--purple);font-weight:600;cursor:pointer;" onclick="showPage('messages', document.getElementById('nav-messages'))">Message Mike directly →</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== QUESTIONS ========== -->
+<div class="page" id="page-questions">
+  <div class="page-hdr">
+    <div><div class="page-title">Ask a Question</div><div class="page-sub">Get answers from Mike or our BuildSynq support team</div></div>
+  </div>
+  <div class="q-card" style="margin-bottom:1.25rem;">
+    <div class="q-card-icon">💬</div>
+    <div>
+      <div class="q-card-title">Common questions from homeowners</div>
+      <div class="q-card-sub">Tap any question to send it to Mike directly, or type your own below.</div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:1.25rem;">
+    <div>
+      <div class="doc-item" onclick="showPage('messages', document.getElementById('nav-messages'))" style="cursor:pointer;"><span class="doc-icon">❓</span><div class="doc-content"><div class="doc-title">When will the project be finished?</div></div><span style="color:var(--purple);font-size:0.82rem;font-weight:600;">Ask Mike →</span></div>
+      <div class="doc-item" onclick="showPage('messages', document.getElementById('nav-messages'))" style="cursor:pointer;"><span class="doc-icon">❓</span><div class="doc-content"><div class="doc-title">Will there be crew here this weekend?</div></div><span style="color:var(--purple);font-size:0.82rem;font-weight:600;">Ask Mike →</span></div>
+      <div class="doc-item" onclick="showPage('messages', document.getElementById('nav-messages'))" style="cursor:pointer;"><span class="doc-icon">❓</span><div class="doc-content"><div class="doc-title">Can I see the receipts for materials?</div></div><span style="color:var(--purple);font-size:0.82rem;font-weight:600;">Ask Mike →</span></div>
+      <div class="doc-item" onclick="showPage('messages', document.getElementById('nav-messages'))" style="cursor:pointer;"><span class="doc-icon">❓</span><div class="doc-content"><div class="doc-title">What happens if I'm not happy with the finished work?</div></div><span style="color:var(--purple);font-size:0.82rem;font-weight:600;">Ask Mike →</span></div>
+      <div class="doc-item" onclick="showPage('messages', document.getElementById('nav-messages'))" style="cursor:pointer;"><span class="doc-icon">❓</span><div class="doc-content"><div class="doc-title">I need to change something — is it too late?</div></div><span style="color:var(--purple);font-size:0.82rem;font-weight:600;">Ask Mike →</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><div class="card-title">💬 Send Mike a Question</div></div>
+    <div class="msg-input-wrap" style="padding:1.25rem 1.5rem;">
+      <input class="msg-input" type="text" placeholder="Type your question for Mike..." style="font-size:0.9rem;padding:0.75rem 1rem;" />
+      <div class="btn btn-primary btn-sm">Send</div>
+    </div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<script>
+function showPage(id, navEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(n => n.classList.remove('active'));
+  const page = document.getElementById('page-' + id);
+  if (page) page.classList.add('active');
+  if (navEl) navEl.classList.add('active');
+  else { const nav = document.getElementById('nav-' + id); if (nav) nav.classList.add('active'); }
+  window.scrollTo(0, 0);
+}
+
+function switchTab(el) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+window.addEventListener('load', () => {
+  document.querySelectorAll('.project-box-fill, .bv-seg').forEach(el => {
+    const w = el.style.width;
+    el.style.width = '0';
+    setTimeout(() => { el.style.width = w; }, 250);
+  });
+});
+</script>
+</body>
+</html>
